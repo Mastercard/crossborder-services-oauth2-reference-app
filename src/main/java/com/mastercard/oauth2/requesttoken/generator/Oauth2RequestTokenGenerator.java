@@ -69,6 +69,10 @@ public class Oauth2RequestTokenGenerator {
                 null,
                 null);
 
+        return initialiseClaimSet(dateNotAfter, createdDate, jwsHeader);
+    }
+
+    private String initialiseClaimSet(Date dateNotAfter, Date createdDate, JWSHeader jwsHeader) {
         String clientAssertionToken = null;
         {
             try {

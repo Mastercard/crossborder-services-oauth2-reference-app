@@ -3,15 +3,18 @@ package com.mastercard.oauth2.requesttoken.constants;
 import com.nimbusds.jose.JWSAlgorithm;
 
 public enum JWTSupportedAlgorithm {
+
+
     RS256("RS256", "SHA-256", "rsa-sha256", "SHA256withRSA"),
     ES256("ES256", "SHA-256", "ecdsa-sha256", "SHA256withECDSA"),
     RS1("RS1", "RSA-SHA1", "rsa-sha1", "SHA1withRSA"),
-    NOT_SUPPORTED("NOT SUPPORTED", "NOT SUPPORTED", "NOT SUPPORTED", "NOT SUPPORTED");
+    NOT_SUPPORTED(Oauth2Constants.NOT_SUPPORTED, Oauth2Constants.NOT_SUPPORTED, Oauth2Constants.NOT_SUPPORTED, Oauth2Constants.NOT_SUPPORTED);
 
     private final String algorithmName;
     private final String hmacAlgorithmName;
     private final String caasSupportedName;
     private final String javaSignature;
+
 
     JWTSupportedAlgorithm(String algorithmName, String hmacAlgorithmName, String caasSupportedName, String javaSignature) {
         this.algorithmName = algorithmName;

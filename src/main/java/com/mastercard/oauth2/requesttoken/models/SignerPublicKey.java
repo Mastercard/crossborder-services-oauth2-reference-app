@@ -20,7 +20,7 @@ public class SignerPublicKey {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        } else if (o != null && o instanceof com.mastercard.oauth2.requesttoken.models.SignerPublicKey) {
+        } else if (o instanceof com.mastercard.oauth2.requesttoken.models.SignerPublicKey) {
             com.mastercard.oauth2.requesttoken.models.SignerPublicKey that = (com.mastercard.oauth2.requesttoken.models.SignerPublicKey)o;
             return (null != this.publicKey && null != that.getPublicKey()) && (this.publicKey.getKeyID().equals(that.getPublicKey().getKeyID()));
         } else {

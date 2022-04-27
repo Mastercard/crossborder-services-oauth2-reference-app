@@ -75,8 +75,7 @@ public class LocalCertificateProvider {
             KeyStore keyStore = loadKeyStore(keystoreLocation, password, keyStoreType);
             return (PrivateKey) keyStore.getKey(alias, password.toCharArray());
         } catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
-            log.error("Exception while attempting to get private key from keystore {} with alias {}. Exception thrown : {}", keystoreLocation, alias ,e);
-            throw new KeyRetrievalException(e);
+           throw new KeyRetrievalException(e);
         }
     }
 
@@ -119,7 +118,6 @@ public class LocalCertificateProvider {
             KeyStore keyStore = this.loadKeyStore(this.keystoreLocation, this.password, this.keyStoreType);
             return this.getSignerPublicKey(algorithm, this.alias, keyStore);
         } catch (CertificateException | IOException | KeyStoreException | NoSuchAlgorithmException var4) {
-            log.error("Exception while attempting to get public key from truststore {}. Exception thrown : {}", this.keystoreLocation, var4);
             throw new KeyRetrievalException("failed to retrieve public key", var4);
         }
     }
@@ -133,7 +131,7 @@ public class LocalCertificateProvider {
                 return this.buildSigningPublicKey(preferredCertificate, algorithm, alias);
             } else {
                 log.warn("certificate type does not match for preferred alias {}", alias);
-                Enumeration aliases = keyStore.aliases();
+                Enumeration<String> aliases = keyStore.aliases();
 
                 while(aliases.hasMoreElements()) {
                     String certAlias = (String)aliases.nextElement();
@@ -150,7 +148,6 @@ public class LocalCertificateProvider {
                 return null;
             }
         } catch (KeyStoreException var10) {
-            log.error("Exception while attempting to get active public key by alias {}. ", alias + "Exception thrown : {}", var10);
             throw new KeyRetrievalException("failed to retrieve public key", var10);
         }
     }
@@ -175,9 +172,9 @@ public class LocalCertificateProvider {
         try {
             return Collections.singletonList(Base64.encode(certificate.getEncoded()));
         } catch (CertificateEncodingException var3) {
-            log.warn("error while converting client certificate {}", var3);
+            log.warn("error while converting client certificate", var3);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void validateAlgorithm(String algorithm) {

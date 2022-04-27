@@ -1,7 +1,6 @@
 package com.mastercard.oauth2.requesttoken.service;
 
 import com.mastercard.oauth2.requesttoken.exception.TokenGenerationException;
-import com.mastercard.oauth2.requesttoken.service.LocalCertificateProvider;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSObject;
@@ -45,13 +44,13 @@ public class LocalTokenSignerService {
                 signer = new ECDSASigner(privateKey, Curve.P_256);
             }
 
-            log.info("using signer " + signer);
+            log.info("using signer {}", signer);
 
             jwsObject.sign(signer);
             return jwsObject.serialize();
 
         } catch (JOSEException e) {
-            log.error("Error occurred during self signing of Token: " + e.getMessage());
+            log.error("Error occurred during self signing of Token {}: ", e.getMessage());
             throw new TokenGenerationException("Error occurred during token signing");
         }
     }
