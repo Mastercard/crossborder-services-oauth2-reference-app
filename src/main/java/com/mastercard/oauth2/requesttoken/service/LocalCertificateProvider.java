@@ -134,7 +134,7 @@ public class LocalCertificateProvider {
                 Enumeration<String> aliases = keyStore.aliases();
 
                 while(aliases.hasMoreElements()) {
-                    String certAlias = (String)aliases.nextElement();
+                    String certAlias = aliases.nextElement();
                     Certificate certificate = keyStore.getCertificate(certAlias);
                     String certificateAlgo = certificate.getPublicKey().getAlgorithm();
                     if (this.verifyKeyType(algorithm, certificateAlgo)) {

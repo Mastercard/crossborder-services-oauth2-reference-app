@@ -74,22 +74,20 @@ public class Oauth2RequestTokenGenerator {
 
     private String initialiseClaimSet(Date dateNotAfter, Date createdDate, JWSHeader jwsHeader) {
         String clientAssertionToken = null;
-        {
-            try {
-                JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                        .expirationTime(dateNotAfter)
-                        .notBeforeTime(createdDate)
-                        .issueTime(createdDate)
-                        .jwtID(new MD5Generator().generateValue()).build();
+        try {
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .expirationTime(dateNotAfter)
+                    .notBeforeTime(createdDate)
+                    .issueTime(createdDate)
+                    .jwtID(new MD5Generator().generateValue()).build();
 
-                // construct a JWT payloadCheckSumUtil
-                Payload payload = new Payload(claimsSet.toJSONObject());
-                JWSObject jwsObject = new JWSObject(jwsHeader, payload);
-                clientAssertionToken = localTokenSignerService.sign(jwsObject);
+            // construct a JWT payloadCheckSumUtil
+            Payload payload = new Payload(claimsSet.toJSONObject());
+            JWSObject jwsObject = new JWSObject(jwsHeader, payload);
+            clientAssertionToken = localTokenSignerService.sign(jwsObject);
 
-            } catch (OAuthSystemException e) {
-                e.printStackTrace();
-            }
+        } catch (OAuthSystemException e) {
+            e.printStackTrace();
         }
         return clientAssertionToken;
     }
