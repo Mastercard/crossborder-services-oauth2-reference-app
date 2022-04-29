@@ -50,16 +50,10 @@ Both the approaches require consumer key and .p12 file as received from [Masterc
        
     >**mastercard.api.decryption.keyFile=**, this is the .key file, required to decrypt a request. Add classpath for .key file, after placing it at src\main\resources in the project folder.
  
- - To generate the OAuth2 Request Token there is a separate utility project. To refer, check [project Location]()
-    
+ 
 ### Build and Run   
 `Using IDE`
- - To generate OAUTH2 Request token import following OAUTH2 maven dependency to your Project:
-       
-       <groupId>com.mastercard</groupId>
-       <artifactId>crossborder-oauth2</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
-       
+
  - Open reference application in IDE and dependencies will be downloaded automatically. Open the maven window,
 	 -  Select MasterCard Cross-Border Services - Reference App
 	 -  Select Life cycle 
