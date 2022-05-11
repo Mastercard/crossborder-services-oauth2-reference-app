@@ -26,6 +26,12 @@ public class MastercardApiConfig {
     @Value("${mastercard.api.authentication.keystore.keyFile}")
     private Resource p12File;
 
+    @Value("${mastercard.api.authentication.keystore.mtlsFile}")
+    private Resource mtlsFile;
+
+    @Value("${mastercard.api.authentication.keystore.mtlsPassword}")
+    private String mtlsPassword;
+
     @Value("${mastercard.api.authentication.keystore.keyStoreType}")
     private String keyStoreType;
 
@@ -116,6 +122,14 @@ public class MastercardApiConfig {
 
     public Resource getP12File() {
         return p12File;
+    }
+
+    public Resource getMTLSFile() {
+        return mtlsFile;
+    }
+
+    public String getMTLSPassword() {
+        return mtlsPassword;
     }
 
     public String getEndPointURL() {
