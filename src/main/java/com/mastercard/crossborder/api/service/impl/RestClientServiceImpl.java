@@ -11,6 +11,8 @@ import com.mastercard.oauth2.requesttoken.generator.Oauth2RequestTokenGenerator;
 import com.mastercard.oauth2.requesttoken.models.TokenInput;
 import com.mastercard.crossborder.api.util.EncryptionUtils;
 import com.nimbusds.jose.JWSAlgorithm;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.w3c.dom.Document;
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -35,11 +39,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.security.KeyStore;
 import java.util.Map;
-
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import static com.mastercard.crossborder.api.constants.MastercardHttpHeaders.ENCRYPTED_HEADER;
 
 @Component
@@ -176,9 +182,11 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         return null;
     }
 
-    private T callCrossBorderAPI(String url, HttpMethod httpMethod, Map<String, java.lang.Object> requestParams, HttpEntity<MultiValueMap<String, String>> requestEntity, Class responseClass) {
-        RestTemplate restTemplate = new RestTemplate();
-        T response;
+    private T callCrossBorderAPI(String url, HttpMethod httpMethod, Map<String, java.lang.Object> requestParams, HttpEntity<MultiValueMap<String, String>> requestEntity, Class responseClass) throws ServiceException {
+        T response = null;
+        // MTLS Two Factor Authentication call
+        RestTemplate restTemplate = new RestTemplate(MTLSAuthetication());
+
         switch (httpMethod) {
             case GET:
                 ResponseEntity result = restTemplate.exchange(url, HttpMethod.GET, requestEntity, responseClass, requestParams);
@@ -190,10 +198,34 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
             default:
                 response = null;
         }
-
         return response;
     }
 
+    private HttpComponentsClientHttpRequestFactory MTLSAuthetication() throws ServiceException {
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        try {
+            KeyStore keystore = KeyStore.getInstance("PKCS12");
+            char[] password = mastercardApiConfig.getMTLSPassword().toCharArray();
+
+            keystore.load(new FileInputStream(mastercardApiConfig.getMTLSFile().getFile()), password);
+
+            SslContextFactory.Client sslContextFactory = new SslContextFactory.Client();
+            sslContextFactory.setKeyStore(keystore);
+            sslContextFactory.setKeyStorePassword(mastercardApiConfig.getMTLSPassword());
+            sslContextFactory.start();
+            SSLContext sslContext = sslContextFactory.getSslContext();
+
+            CloseableHttpClient httpClient = HttpClients.custom()
+                    .setSSLContext(sslContext)
+                    .build();
+
+            requestFactory.setHttpClient(httpClient);
+
+            return requestFactory;
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
 
     private boolean processForEncryption(Boolean encrypt) {
         return encrypt && mastercardApiConfig.getRunWithEncryptedPayload();
