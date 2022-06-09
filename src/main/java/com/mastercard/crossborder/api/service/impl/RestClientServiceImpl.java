@@ -68,8 +68,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
         String requestStr = convertToString(headers, request);
 
-        /* Generate oauth*/
-        //String oAuthString = authenticate(url, httpMethod, requestStr);
+        /* Generate OAuth2.0 Request Token*/
         String oAuthString = "Bearer " + getRequestToken();
 
         /*Build requestEntity */
