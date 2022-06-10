@@ -21,6 +21,7 @@ Both the approaches require consumer key and .p12 file as received from [Masterc
 - Create a new project and add `Mastercard Cross-Border Services` API to your project.   
 - Configure project and download signing key. It will download the zip file.  
 - Select .p12 file from zip and copy it to `src\main\resources` in the project folder.
+- Generate client certificate(.PKCS12 or .PFX file) to establish mTLS connectivity. Contact customer support for more details.
 - Open `[project folder]\src\main\resources\mastercard-api.properties` and configure below parameters.
     
     >**mastercard.api.environment.sandbox.endPoint URL for uk = https://sandbox.api.xbs.mastercard.uk/**, its a static field, will be used as a host to make API calls.
@@ -253,8 +254,16 @@ This API supports only JSON.
 - In this case, request payload is empty but the response payload will be encrypted.
 - Please refer to #Usecase - 2 in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
 
+### Authentication details 
+
+Cross border APIs support OAuth2.0 request token based authentication for EU and UK domains. 
+
+OAUTH2_REQUEST_TOKEN grant type is a special implementation by Mastercard. It is an authentication and authorization method implemented to allow consumer 
+application to consume Cross-Border Service APIs and it is one-legged auth implementation. It means your API request must contain a signed JWT token 
+(using token specification) as ‘Authorization’ header for authentication.
 
 ### Implementation details for cross-border APIs
+
 To develop a client application using cross border APIs, refer below documentation. All the cross-border APIs are REST APIs that support both XML and JSON as a payload.   
 
 - [Request a quote for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-quotes-api/) (HTTP POST)
