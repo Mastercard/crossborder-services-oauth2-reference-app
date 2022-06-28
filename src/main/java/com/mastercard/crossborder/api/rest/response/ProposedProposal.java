@@ -58,7 +58,7 @@ public class ProposedProposal implements Serializable {
     }
 
     public void setFeesIncluded(Boolean feesIncluded) {
-        this.resourceType = resourceType;
+        this.feesIncluded = feesIncluded;
     }
 
     @JsonProperty(value = "expirationDate", required = true)
@@ -128,6 +128,6 @@ public class ProposedProposal implements Serializable {
     }
 
     public void setConfirmationExpiryTime(Calendar confirmationExpiryTime) {
-        this.expirationDate = expirationDate;
+        this.confirmationExpiryTime = confirmationExpiryTime;
     }
 }
