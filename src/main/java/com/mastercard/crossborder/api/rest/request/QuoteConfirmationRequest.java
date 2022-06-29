@@ -23,10 +23,12 @@ public class QuoteConfirmationRequest extends BaseRequest implements Serializabl
 
     @JsonProperty(value = "transactionReference", required = true)
     @XmlElement(name = "transactionReference", required = true)
+    @Override
     public String getTransactionReference() {
         return transactionReference;
     }
 
+    @Override
     public void setTransactionReference(String transactionReference) {
         this.transactionReference = transactionReference;
     }

@@ -117,7 +117,7 @@ public class DownloadDocumentAPITest {
         } catch (ServiceException se){
             Errors errors = se.getErrors();
             Error error = errors.getError();
-            Assert.assertFalse(errors== null);
+            Assert.assertNotNull(errors);
             if( error != null) {
                 assertEquals("document_id", error.getSource());
                 assertEquals("DECLINE", error.getReasonCode());

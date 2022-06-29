@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
 /*
@@ -23,7 +22,10 @@ public class QuoteConfirmationAPI {
 
 
     @Autowired
-    RestClientService restClientService;
+    RestClientService<QuoteConfirmationResponse> restClientService;
+
+    @Autowired
+    RestClientService<RetrieveQuoteStatus> restClientServ;
 
     private static final Logger logger = LoggerFactory.getLogger(QuoteConfirmationAPI.class);
 
@@ -33,16 +35,16 @@ public class QuoteConfirmationAPI {
 
     public QuoteConfirmationResponse getQuoteConfirmation(HttpHeaders headers, Map<String, Object> requestParams, QuoteConfirmation quoteConfirmRequest) throws ServiceException {
         logger.info("Calling Quote Confirmation API");
-        return (QuoteConfirmationResponse) restClientService.service(QUOTE_CONFIRMATION, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
+        return restClientService.service(QUOTE_CONFIRMATION, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
     }
 
     public QuoteConfirmationResponse cancelConfirmedQuote(HttpHeaders headers, Map<String, Object> requestParams, QuoteConfirmation quoteConfirmRequest) throws ServiceException {
         logger.info("Calling Cancel Confirmed Quote API");
-        return (QuoteConfirmationResponse) restClientService.service(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
+        return restClientService.service(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
     }
 
     public RetrieveQuoteStatus retrieveConfirmedQuote(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
         logger.info("Calling Retrieve Confirmed Quote API");
-        return (RetrieveQuoteStatus) restClientService.service(RETRIEVE_CONFIRMED_QUOTE, headers, HttpMethod.GET, requestParams, null, RetrieveQuoteStatus.class);
+        return restClientServ.service(RETRIEVE_CONFIRMED_QUOTE, headers, HttpMethod.GET, requestParams, null, RetrieveQuoteStatus.class);
     }
 }

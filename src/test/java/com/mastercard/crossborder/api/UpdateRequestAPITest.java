@@ -123,7 +123,7 @@ public class UpdateRequestAPITest {
         } catch (ServiceException se){
             Errors errors = se.getErrors();
             Error error = errors.getError();
-            Assert.assertFalse(se.getErrors()== null);
+            Assert.assertNotNull(se.getErrors());
             if( error != null) {
                 assertEquals("request_id", error.getSource());
                 assertEquals("DECLINE", error.getReasonCode());

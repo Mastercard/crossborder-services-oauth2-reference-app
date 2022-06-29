@@ -11,13 +11,13 @@ import java.io.Serializable;
 public class ResponseDocuments implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Response response;
+    private Response<Object> response;
     @JsonProperty(value = "response")
-    public Response getResponse() {
+    public Response<Object> getResponse() {
         return response;
     }
 
-    public void setResponse(Response response) {
+    public void setResponse(Response<Object> response) {
         this.response = response;
     }
 

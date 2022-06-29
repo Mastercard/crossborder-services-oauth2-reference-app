@@ -19,19 +19,19 @@ public class DownloadDocumentAPI {
         public static final String DOWNLOAD_DOCUMENT = "/send/partners/{partner_id}/crossborder/rfi/documents/{document_id}";
 
         @Autowired
-        RestClientService restClientService;
+        RestClientService<DownloadDocumentResponse> restClientService;
 
         public DownloadDocumentResponse downloadDocumentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
             logger.info("Calling DownloadDocument API by Document ID ");
-            return (DownloadDocumentResponse) restClientService.service(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams,null, DownloadDocumentResponse.class);
+            return restClientService.service(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams,null, DownloadDocumentResponse.class);
         }
 
 
         public DownloadDocumentResponse downloadDocumentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
             logger.info("Calling DownloadDocument API with Encryption by Document ID");
-            return (DownloadDocumentResponse) restClientService.serviceEncryption(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams, null, DownloadDocumentResponse.class);
+            return restClientService.serviceEncryption(DOWNLOAD_DOCUMENT, headers, HttpMethod.GET, requestParams, null, DownloadDocumentResponse.class);
         }
     }
 

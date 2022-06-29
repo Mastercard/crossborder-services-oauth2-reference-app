@@ -3,12 +3,14 @@ package com.mastercard.crossborder.api.rest.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.io.Serializable;
+
 @JsonPropertyOrder(value = {"request","review","response" })
-public class SourceOfIncome {
+public class SourceOfIncome implements Serializable {
 
     private Request request;
     private Review review;
-    private Response response;
+    private Response<Object> response;
 
     @JsonProperty(value = "request")
     public Request getRequest() {
@@ -29,11 +31,11 @@ public class SourceOfIncome {
     }
 
     @JsonProperty(value = "response")
-    public Response getResponse() {
+    public Response<Object> getResponse() {
         return response;
     }
 
-    public void setResponse(Response response) {
+    public void setResponse(Response<Object> response) {
         this.response = response;
     }
 }

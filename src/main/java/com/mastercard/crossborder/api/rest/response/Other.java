@@ -13,7 +13,7 @@ public class Other implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    List<Comments> comments = new ArrayList();
+    List<Comments> comments = new ArrayList<>();
     ResponseDocuments responseDocuments;
     RequestDocuments requestDocuments;
 

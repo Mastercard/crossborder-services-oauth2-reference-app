@@ -10,7 +10,7 @@ public class PlaceOfBirth implements Serializable {
 
     private Request request;
     private Review review;
-    private Response response;
+    private Response<Object> response;
 
     @JsonProperty(value = "request")
     public Request getRequest() {
@@ -31,11 +31,11 @@ public class PlaceOfBirth implements Serializable {
     }
 
     @JsonProperty(value = "response")
-    public Response getResponse() {
+    public Response<Object> getResponse() {
         return response;
     }
 
-    public void setResponse(Response response) {
+    public void setResponse(Response<Object> response) {
         this.response = response;
     }
 

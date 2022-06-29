@@ -1,8 +1,10 @@
 package com.mastercard.crossborder.api.rest.response;
 
-public class SenderRecipientRelation {
+import java.io.Serializable;
 
-    Request RequestObject;
-    Review ReviewObject;
-    Response ResponseObject;
+public class SenderRecipientRelation implements Serializable {
+
+    Request requestObject;
+    Review reviewObject;
+    Response<Object> responseObject;
 }

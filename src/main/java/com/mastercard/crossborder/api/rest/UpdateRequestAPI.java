@@ -20,17 +20,17 @@ public class UpdateRequestAPI {
     public static final String UPDATE_REQUEST = "/send/partners/{partner_id}/crossborder/rfi/requests/{request_id}";
 
     @Autowired
-    RestClientService restClientService;
+    RestClientService<UpdateResponse> restClientService;
 
     public UpdateResponse updateRequest(HttpHeaders headers, Map<String, Object> requestParams, UpdateRequest updateRequest) throws ServiceException {
 
         logger.info("Calling UpdateRequest API");
-        return (UpdateResponse) restClientService.service(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
+        return restClientService.service(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
     }
     public UpdateResponse updateRequestWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, UpdateRequest updateRequest) throws ServiceException {
 
         logger.info("Calling UpdateRequest API with Encryption");
-        return (UpdateResponse) restClientService.serviceEncryption(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
+        return restClientService.serviceEncryption(UPDATE_REQUEST, headers, HttpMethod.POST, requestParams, updateRequest, UpdateResponse.class);
     }
 
 }
