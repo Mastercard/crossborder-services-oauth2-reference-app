@@ -1,6 +1,6 @@
 package com.mastercard.crossborder.api.rest;
 import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.request.CancelConfirmedQuoteRequest;
+import com.mastercard.crossborder.api.rest.request.QuoteConfirmation;
 import com.mastercard.crossborder.api.rest.response.CancelConfirmedQuoteResponse;
 import com.mastercard.crossborder.api.service.RestClientService;
 import org.slf4j.Logger;
@@ -28,12 +28,12 @@ public class CancelConfirmedQuoteAPI {
 
     public static final String CANCEL_CONFIRMED_QUOTE = "/send/partners/{partner_id}/crossborder/quotes/cancellations" ;
 
-    public CancelConfirmedQuoteResponse getQuote(HttpHeaders headers, Map<String, Object> requestParams, CancelConfirmedQuoteRequest cancelConfirmedQuoteRequest) throws ServiceException {
+    public CancelConfirmedQuoteResponse getQuote(HttpHeaders headers, Map<String, Object> requestParams, QuoteConfirmation cancelConfirmedQuoteRequest) throws ServiceException {
         logger.info("Calling Cancel Confirmed Quote API");
         return restClientService.service(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, cancelConfirmedQuoteRequest, CancelConfirmedQuoteResponse.class);
 
     }
-    public CancelConfirmedQuoteResponse getQuoteWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, CancelConfirmedQuoteRequest cancelConfirmedQuoteRequest) throws ServiceException {
+    public CancelConfirmedQuoteResponse getQuoteWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, QuoteConfirmation cancelConfirmedQuoteRequest) throws ServiceException {
         logger.info("Calling Cancel Confirmed Quote API With Encryption");
         return restClientService.serviceEncryption(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, cancelConfirmedQuoteRequest, CancelConfirmedQuoteResponse.class);
     }

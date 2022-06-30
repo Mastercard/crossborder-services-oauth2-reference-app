@@ -3,7 +3,6 @@ package com.mastercard.crossborder.api.rest.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import java.io.Serializable;
 
 @JsonTypeName(value = "paymentAndDocs")
@@ -13,9 +12,9 @@ public class PaymentAndDocs implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private SenderRecipientRelation senderRecipientRelation;
+    private transient SenderRecipientRelation senderRecipientRelation;
     private PaymentPurpose paymentPurpose;
-    private SupportingDocs supportingDocs;
+    private transient SupportingDocs supportingDocs;
     private AdditionalDocuments additionalDocuments;
     private AdditionalQuestion additionalQuestion;
 

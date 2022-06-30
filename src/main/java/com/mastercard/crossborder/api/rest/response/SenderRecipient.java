@@ -2,11 +2,10 @@ package com.mastercard.crossborder.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import java.io.Serializable;
 
 @JsonPropertyOrder(value = {"fullName", "dateOfBirth", "placeOfBirth", "nationality", "governmentId","fullAddress","sourceOfIncome","additionalDocuments","additionalQuestion" })
-public class Sender implements Serializable {
+public class SenderRecipient implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +15,7 @@ public class Sender implements Serializable {
     private Nationality nationality;
     private GovernmentId governmentId;
     private FullAddress fullAddress;
-    private SourceOfIncome sourceOfIncome;
+    private transient SourceOfIncome sourceOfIncome;
     private AdditionalDocuments additionalDocuments;
     private AdditionalQuestion additionalQuestion;
 

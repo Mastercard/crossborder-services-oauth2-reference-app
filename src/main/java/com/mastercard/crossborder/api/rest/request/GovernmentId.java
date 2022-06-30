@@ -1,7 +1,6 @@
 package com.mastercard.crossborder.api.rest.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class GovernmentId implements Serializable {
 
     private String type;
     private String number;
-    private List< Object > documents = new ArrayList< Object>();
+    private transient List< Object > documents = new ArrayList< Object>();
 
 
     @JsonProperty(value = "type")
