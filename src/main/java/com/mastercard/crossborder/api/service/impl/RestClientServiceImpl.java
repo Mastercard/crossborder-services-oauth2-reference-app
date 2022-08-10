@@ -11,8 +11,13 @@ import com.mastercard.oauth2.requesttoken.generator.Oauth2RequestTokenGenerator;
 import com.mastercard.oauth2.requesttoken.models.TokenInput;
 import com.mastercard.crossborder.api.util.EncryptionUtils;
 import com.nimbusds.jose.JWSAlgorithm;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,19 +188,40 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     private T callCrossBorderAPI(String url, HttpMethod httpMethod, Map<String, java.lang.Object> requestParams, HttpEntity<MultiValueMap<String, String>> requestEntity, Class responseClass) throws ServiceException {
         T response = null;
-        // MTLS Two Factor Authentication call
-        RestTemplate restTemplate = new RestTemplate(MTLSAuthetication());
+        try {
+            KeyStore keystore = KeyStore.getInstance("PKCS12");
+            char[] password= mastercardApiConfig.getMTLSPassword().toCharArray();
 
-        switch (httpMethod) {
-            case GET:
-                ResponseEntity result = restTemplate.exchange(url, HttpMethod.GET, requestEntity, responseClass, requestParams);
-                response = (T) result.getBody();
-                break;
-            case POST:
-                response = (T) restTemplate.postForObject(url, requestEntity, responseClass, requestParams);
-                break;
-            default:
-                response = null;
+            keystore.load(new FileInputStream(mastercardApiConfig.getMTLSFile().getFile()),password);
+            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
+                    new SSLContextBuilder()
+                            .loadTrustMaterial(null, new TrustSelfSignedStrategy())
+                            .loadKeyMaterial(keystore, password)
+                            .build(),
+
+                    NoopHostnameVerifier.INSTANCE);
+            HttpClient httpClient = HttpClients.custom()
+                    .setSSLSocketFactory(socketFactory)
+                    .build();
+
+            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+            requestFactory.setHttpClient(httpClient);
+
+            RestTemplate restTemplate = new RestTemplate(requestFactory);
+
+            switch (httpMethod) {
+                case GET:
+                    ResponseEntity result = restTemplate.exchange(url, HttpMethod.GET, requestEntity, responseClass, requestParams);
+                    response = (T) result.getBody();
+                    break;
+                case POST:
+                    response = (T) restTemplate.postForObject(url, requestEntity, responseClass, requestParams);
+                    break;
+                default:
+                    response = null;
+            }
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
         }
         return response;
     }

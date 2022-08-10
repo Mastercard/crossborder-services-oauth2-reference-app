@@ -11,9 +11,13 @@ import com.mastercard.crossborder.api.rest.request.QuoteType;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
 import com.mastercard.crossborder.api.rest.request.RemittanceRequest;
 import com.mastercard.crossborder.api.rest.request.ReverseFees;
-
+import com.mastercard.crossborder.api.rest.request.QuoteConfirmation;
+import com.mastercard.crossborder.api.rest.request.UpdateRequest;
+import com.mastercard.crossborder.api.rest.request.Sender;
+import com.mastercard.crossborder.api.rest.request.UploadDocumentRequest;
 import java.util.ArrayList;
 import java.util.List;
+
 /*
     This is a helper class, can be used to modify data to be passed to APIs.
  */
@@ -98,7 +102,7 @@ public class CrossBorderAPITestHelper {
      * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForwardQuoteFeesNotIncluded() {
-        RemittanceRequest  paymentRequest = new RemittanceRequest();
+        RemittanceRequest paymentRequest = new RemittanceRequest();
         //This will make payment in Pending status
         paymentRequest.setRemittanceReference("08" + System.currentTimeMillis() + "ACFQ");
         paymentRequest.setSenderAccountUri("tel:+254108989");
@@ -184,7 +188,7 @@ public class CrossBorderAPITestHelper {
      * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForwardQuoteFeesIncluded() {
-        RemittanceRequest  paymentRequest = new RemittanceRequest();
+        RemittanceRequest paymentRequest = new RemittanceRequest();
         //This will make payment in Pending status
 
         paymentRequest.setRemittanceReference("08" + System.currentTimeMillis() + "RMFQ");
@@ -281,7 +285,7 @@ public class CrossBorderAPITestHelper {
      * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForBusinessToBusiness() {
-        RemittanceRequest  paymentRequest = new RemittanceRequest();
+        RemittanceRequest paymentRequest = new RemittanceRequest();
         //This will make payment in Pending status
 
         paymentRequest.setRemittanceReference("08" + System.currentTimeMillis() + "RMFQ");
@@ -374,7 +378,7 @@ public class CrossBorderAPITestHelper {
      * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForGovernmentToPerson() {
-        RemittanceRequest  paymentRequest = new RemittanceRequest();
+        RemittanceRequest paymentRequest = new RemittanceRequest();
         //This will make payment in Pending status
 
         paymentRequest.setRemittanceReference("08" + System.currentTimeMillis() + "RMFQ");
@@ -464,7 +468,7 @@ public class CrossBorderAPITestHelper {
 
 
     public static RemittanceRequest setPaymentDataRejectedStatus() {
-        RemittanceRequest  paymentRequest = new RemittanceRequest();
+        RemittanceRequest paymentRequest = new RemittanceRequest();
         paymentRequest.setRemittanceReference(String.valueOf(System.currentTimeMillis()));
         paymentRequest.setProposalId("BadProposalId");
         paymentRequest.setSourceOfIncome("Bank");
@@ -516,7 +520,7 @@ public class CrossBorderAPITestHelper {
      * @return RemittanceRequest
      */
     public static RemittanceRequest setPaymentDataForReverseQuote() {
-        RemittanceRequest  paymentRequest = new RemittanceRequest();
+        RemittanceRequest paymentRequest = new RemittanceRequest();
         //This will make payment in Pending status
         paymentRequest.setRemittanceReference("08" + System.currentTimeMillis() + "RMRQ");
         paymentRequest.setSenderAccountUri("tel:+254108989");
@@ -591,7 +595,7 @@ public class CrossBorderAPITestHelper {
         return paymentRequest;
     }
     public static RemittanceRequest setPaymentDataWithQuote(String proposalId) {
-        RemittanceRequest  paymentRequest = new RemittanceRequest();
+        RemittanceRequest paymentRequest = new RemittanceRequest();
         paymentRequest.setRemittanceReference("08" + System.currentTimeMillis() + "RMFQ");
         paymentRequest.setProposalId(proposalId);
         paymentRequest.setSourceOfIncome("Bank");
@@ -631,6 +635,32 @@ public class CrossBorderAPITestHelper {
         paymentRequest.setReceiverInformation(recipientData);
 
         return paymentRequest;
+    }
+
+    public static QuoteConfirmation setDataForQuoteConfirmation(String proposalId, String transactionReference ){
+        QuoteConfirmation quoteConfirmationRequest=new QuoteConfirmation();
+        quoteConfirmationRequest.setProposalId(proposalId);
+        quoteConfirmationRequest.setTransactionReference(transactionReference);
+        return quoteConfirmationRequest;
+    }
+
+    public static UpdateRequest setDataForUpdateRequest(){
+        /* set the input */
+        UpdateRequest request = new UpdateRequest();
+        Sender sender=new Sender();
+        sender.setFullName("Joseph Bloggs");
+        request.setSender(sender);
+        return request;
+    }
+
+    public static UploadDocumentRequest setDataForUploadDocument(){
+        /* set the input */
+        UploadDocumentRequest request = new UploadDocumentRequest();
+        request.setFileName("Passport copy.txt");
+        request.setFile("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+
+
+        return request;
     }
 
 }
