@@ -60,21 +60,30 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
     private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     private TransformerFactory tf = TransformerFactory.newInstance();
     private ObjectMapper mapper = new ObjectMapper();
+    public static final String BALANCE_API = "/accounts";
+    public static final String REQUEST_TOKEN = "Bearer";
 
     @Autowired
     MastercardApiConfig mastercardApiConfig;
 
     @Override
-    public T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, java.lang.Object> requestParams, Object request, Class<T> responseClass) throws ServiceException {
+    public T service(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException {
 
 
         String url = buildURL(baseURL, requestParams);
 
-
+        String oAuthString;
         String requestStr = convertToString(headers, request);
 
-        /* Generate OAuth2.0 Request Token*/
-        String oAuthString = "Bearer " + getRequestToken();
+        /* Generate oauth*/
+        //String oAuthString = authenticate(url, httpMethod, requestStr);
+        if(mastercardApiConfig.getRunAllAPIsWithAccessToken()) {
+            oAuthString = mastercardApiConfig.getAccessToken(); //getRequestToken();
+            validateBalanceAPICall(baseURL, oAuthString);
+        } else {
+            oAuthString = "Bearer " + getRequestToken();
+            validateBalanceAPICall(baseURL, oAuthString);
+        }
 
         /*Build requestEntity */
         HttpEntity<MultiValueMap<String, String>> requestEntity = generateRequestEntity(Boolean.FALSE, headers, requestStr, oAuthString);
@@ -93,13 +102,19 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
     }
 
+    private void validateBalanceAPICall(String baseURL, String oAuthString) throws ServiceException {
+        if(baseURL.contains(BALANCE_API) && (oAuthString == null || oAuthString.contains(REQUEST_TOKEN))) {
+            throw new ServiceException("To access Balance APIs, please configure Access Token in .properties file.");
+        }
+    }
+
     @Override
-    public T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, java.lang.Object> requestParams, Object request, Class<T> responseClass) throws ServiceException {
+    public T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException {
 
         if (mastercardApiConfig.getRunWithEncryptedPayload()) {
 
             String url = buildURL(baseURL, requestParams);
-
+            String oAuthString;
             String requestStr = convertToString(headers, request);
 
             /*Encrypt the request payload and return */
@@ -107,7 +122,13 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
 
             /* Generate oauth*/
             //String oAuthString = authenticate(url, httpMethod, requestBody);
-            String oAuthString = "Bearer " + getRequestToken();
+            if(mastercardApiConfig.getRunAllAPIsWithAccessToken()) {
+                oAuthString = mastercardApiConfig.getAccessToken(); //getRequestToken();
+                validateBalanceAPICall(baseURL, oAuthString);
+            } else {
+                oAuthString = "Bearer " + getRequestToken();
+                validateBalanceAPICall(baseURL, oAuthString);
+            }
 
             /*Build requestEntity */
             HttpEntity<MultiValueMap<String, String>> requestEntity = generateRequestEntity(Boolean.TRUE, headers, requestBody, oAuthString);
@@ -129,7 +150,7 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         return null;
     }
 
-    private String buildURL(String baseURL, Map<String, java.lang.Object> requestParams) {
+    private String buildURL(String baseURL, Map<String, Object> requestParams) {
 
         String builtURL = UriComponentsBuilder.fromHttpUrl(mastercardApiConfig.getEndPointURL() + "/" + baseURL).uriVariables(requestParams).build().toUriString();
         logger.info("requestURL : {}", builtURL);

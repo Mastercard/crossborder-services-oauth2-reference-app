@@ -56,37 +56,11 @@ public class MastercardApiConfig {
     @Value("${mastercard.api.decryption.keyFile}")
     private Resource decryptionKeyFile;
 
-    public String getKeystoreLocation() {
-        return keystoreLocation;
-    }
+    @Value("${mastercard.api.environment.runAllAPIsWithAccessToken}")
+    private Boolean runAllAPIsWithAccessToken;
 
-    public void setKeystoreLocation(String keystoreLocation) {
-        this.keystoreLocation = keystoreLocation;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getKeyStore() {
-        return keyStore;
-    }
-
-    public void setKeyStore(String keyStore) {
-        this.keyStore = keyStore;
-    }
+    @Value("${mastercard.api.environment.oauth2.accessToken}")
+    private String accessToken;
 
     @Value("${mastercard.api.authentication.keystore.keyFile:}")
     private String keystoreLocation;
@@ -161,6 +135,54 @@ public class MastercardApiConfig {
 
     public String getSignatureType() {
         return signatureType;
+    }
+
+    public Boolean getRunAllAPIsWithAccessToken() {
+        return runAllAPIsWithAccessToken;
+    }
+
+    public void setRunAllAPIsWithAccessToken(Boolean runAllAPIsWithAccessToken) {
+        this.runAllAPIsWithAccessToken = runAllAPIsWithAccessToken;
+    }
+
+    public String getKeystoreLocation() {
+        return keystoreLocation;
+    }
+
+    public void setKeystoreLocation(String keystoreLocation) {
+        this.keystoreLocation = keystoreLocation;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getKeyStore() {
+        return keyStore;
+    }
+
+    public void setKeyStore(String keyStore) {
+        this.keyStore = keyStore;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
 }
