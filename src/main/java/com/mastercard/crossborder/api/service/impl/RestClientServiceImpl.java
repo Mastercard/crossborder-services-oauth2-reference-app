@@ -212,23 +212,29 @@ public class RestClientServiceImpl<T> implements RestClientService<T> {
         try {
             KeyStore keystore = KeyStore.getInstance("PKCS12");
             char[] password= mastercardApiConfig.getMTLSPassword().toCharArray();
+            RestTemplate restTemplate;
 
-            keystore.load(new FileInputStream(mastercardApiConfig.getMTLSFile().getFile()),password);
-            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
-                    new SSLContextBuilder()
-                            .loadTrustMaterial(null, new TrustSelfSignedStrategy())
-                            .loadKeyMaterial(keystore, password)
-                            .build(),
+            if (mastercardApiConfig.getMTLSFile() != null) {
+                keystore.load(new FileInputStream(mastercardApiConfig.getMTLSFile().getFile()), password);
+                SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
+                        new SSLContextBuilder()
+                                .loadTrustMaterial(null, new TrustSelfSignedStrategy())
+                                .loadKeyMaterial(keystore, password)
+                                .build(),
 
-                    NoopHostnameVerifier.INSTANCE);
-            HttpClient httpClient = HttpClients.custom()
-                    .setSSLSocketFactory(socketFactory)
-                    .build();
+                        NoopHostnameVerifier.INSTANCE);
+                HttpClient httpClient = HttpClients.custom()
+                        .setSSLSocketFactory(socketFactory)
+                        .build();
 
-            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-            requestFactory.setHttpClient(httpClient);
+                HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+                requestFactory.setHttpClient(httpClient);
 
-            RestTemplate restTemplate = new RestTemplate(requestFactory);
+                restTemplate = new RestTemplate(requestFactory);
+            } else {
+                //This condition should be executed in sandbox environment only for testing purpose.
+                restTemplate = new RestTemplate();
+            }
 
             switch (httpMethod) {
                 case GET:
