@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
+
 import javax.annotation.PostConstruct;
+
 
 @Configuration
 @PropertySource("mastercard-api.properties")
@@ -26,18 +28,6 @@ public class MastercardApiConfig {
     @Value("${mastercard.api.authentication.keystore.keyFile}")
     private Resource p12File;
 
-    @Value("${mastercard.api.authentication.keystore.mtlsFile}")
-    private Resource mtlsFile;
-
-    @Value("${mastercard.api.authentication.keystore.mtlsPassword}")
-    private String mtlsPassword;
-
-    @Value("${mastercard.api.authentication.keystore.keyStoreType}")
-    private String keyStoreType;
-
-    @Value("${mastercard.api.authentication.keystore.signatureType}")
-    private String signatureType;
-
     @Value("${mastercard.api.environment.sandbox.endPointURL}")
     private String sandboxEndPointURL;
 
@@ -55,25 +45,13 @@ public class MastercardApiConfig {
 
     @Value("${mastercard.api.decryption.keyFile}")
     private Resource decryptionKeyFile;
-
-    @Value("${mastercard.api.environment.runAllAPIsWithAccessToken}")
-    private Boolean runAllAPIsWithAccessToken;
-
-    @Value("${mastercard.api.environment.oauth2.accessToken}")
-    private String accessToken;
-
-    @Value("${mastercard.api.authentication.keystore.keyFile:}")
-    private String keystoreLocation;
-
-    @Value("${mastercard.api.authentication.keystore.keyalias:}")
-    private String alias;
-
-    @Value("${mastercard.api.authentication.keystore.password:}")
-    private String password;
-
-    @Value("${mastercard.api.authentication.keystore.keyStoreType:}")
-    private String keyStore;
-
+    
+    @Value("${mastercard.api.decryption.keyAlias}")
+    private String decryptionKeyAlias;
+    
+    @Value("${mastercard.api.decryption.password}")
+    private String decryptionKeyPassword;
+    
     @PostConstruct
     public void setupApiConfiguration() throws ServiceException {
         if(null == p12File || StringUtils.isEmpty( consumerKey))
@@ -98,14 +76,6 @@ public class MastercardApiConfig {
         return p12File;
     }
 
-    public Resource getMTLSFile() {
-        return mtlsFile;
-    }
-
-    public String getMTLSPassword() {
-        return mtlsPassword;
-    }
-
     public String getEndPointURL() {
         return sandboxEndPointURL;
     }
@@ -128,61 +98,11 @@ public class MastercardApiConfig {
     public Resource getDecryptionKeyFile() {
         return decryptionKeyFile;
     }
-
-    public String getKeyStoreType() {
-        return keyStoreType;
+    public String getDecryptionKeyAlias() {
+        return decryptionKeyAlias;
     }
 
-    public String getSignatureType() {
-        return signatureType;
+    public String getDecryptionKeyPassword() {
+        return decryptionKeyPassword;
     }
-
-    public Boolean getRunAllAPIsWithAccessToken() {
-        return runAllAPIsWithAccessToken;
-    }
-
-    public void setRunAllAPIsWithAccessToken(Boolean runAllAPIsWithAccessToken) {
-        this.runAllAPIsWithAccessToken = runAllAPIsWithAccessToken;
-    }
-
-    public String getKeystoreLocation() {
-        return keystoreLocation;
-    }
-
-    public void setKeystoreLocation(String keystoreLocation) {
-        this.keystoreLocation = keystoreLocation;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getKeyStore() {
-        return keyStore;
-    }
-
-    public void setKeyStore(String keyStore) {
-        this.keyStore = keyStore;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
 }

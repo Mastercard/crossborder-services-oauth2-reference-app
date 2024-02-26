@@ -23,17 +23,17 @@ public class UploadDocumentAPI {
     public static final String UPLOAD_DOCUMENT = "/send/partners/{partner_id}/crossborder/rfi/documents";
 
     @Autowired
-    RestClientService<UploadDocumentResponse> restClientService;
+    RestClientService restClientService;
 
     public UploadDocumentResponse uploadDocument(HttpHeaders headers, Map<String, Object> requestParams, UploadDocumentRequest uploadDocumentRequest) throws ServiceException {
 
         logger.info("Calling UploadDocument API");
-        return restClientService.service(UPLOAD_DOCUMENT, headers, HttpMethod.POST, requestParams, uploadDocumentRequest, UploadDocumentResponse.class);
+        return (UploadDocumentResponse) restClientService.service(UPLOAD_DOCUMENT, headers, HttpMethod.POST, requestParams, uploadDocumentRequest, UploadDocumentResponse.class);
     }
     public UploadDocumentResponse uploadDocumentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, UploadDocumentRequest uploadDocumentRequest) throws ServiceException {
 
         logger.info("Calling UploadDocument API with Encryption");
-        return restClientService.serviceEncryption(UPLOAD_DOCUMENT, headers, HttpMethod.POST, requestParams, uploadDocumentRequest, UploadDocumentResponse.class);
+        return (UploadDocumentResponse) restClientService.serviceEncryption(UPLOAD_DOCUMENT, headers, HttpMethod.POST, requestParams, uploadDocumentRequest, UploadDocumentResponse.class);
     }
 
 }

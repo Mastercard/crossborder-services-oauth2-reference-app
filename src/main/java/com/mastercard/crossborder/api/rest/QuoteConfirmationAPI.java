@@ -1,5 +1,4 @@
 package com.mastercard.crossborder.api.rest;
-
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.request.QuoteConfirmation;
 import com.mastercard.crossborder.api.rest.response.QuoteConfirmationResponse;
@@ -22,10 +21,7 @@ public class QuoteConfirmationAPI {
 
 
     @Autowired
-    RestClientService<QuoteConfirmationResponse> restClientService;
-
-    @Autowired
-    RestClientService<RetrieveQuoteStatus> restClientServ;
+    RestClientService restClientService;
 
     private static final Logger logger = LoggerFactory.getLogger(QuoteConfirmationAPI.class);
 
@@ -35,16 +31,21 @@ public class QuoteConfirmationAPI {
 
     public QuoteConfirmationResponse getQuoteConfirmation(HttpHeaders headers, Map<String, Object> requestParams, QuoteConfirmation quoteConfirmRequest) throws ServiceException {
         logger.info("Calling Quote Confirmation API");
-        return restClientService.service(QUOTE_CONFIRMATION, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
+        return (QuoteConfirmationResponse) restClientService.service(QUOTE_CONFIRMATION, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
+    }
+
+    public QuoteConfirmationResponse getQuoteConfirmationWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, QuoteConfirmation quoteConfirmRequest) throws ServiceException {
+        logger.info("Calling Quote Confirmation API With Encryption");
+        return (QuoteConfirmationResponse) restClientService.serviceEncryption(QUOTE_CONFIRMATION, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
     }
 
     public QuoteConfirmationResponse cancelConfirmedQuote(HttpHeaders headers, Map<String, Object> requestParams, QuoteConfirmation quoteConfirmRequest) throws ServiceException {
         logger.info("Calling Cancel Confirmed Quote API");
-        return restClientService.service(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
+        return (QuoteConfirmationResponse) restClientService.service(CANCEL_CONFIRMED_QUOTE, headers, HttpMethod.POST, requestParams, quoteConfirmRequest, QuoteConfirmationResponse.class);
     }
 
     public RetrieveQuoteStatus retrieveConfirmedQuote(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
         logger.info("Calling Retrieve Confirmed Quote API");
-        return restClientServ.service(RETRIEVE_CONFIRMED_QUOTE, headers, HttpMethod.GET, requestParams, null, RetrieveQuoteStatus.class);
+        return (RetrieveQuoteStatus) restClientService.service(RETRIEVE_CONFIRMED_QUOTE, headers, HttpMethod.GET, requestParams, null, RetrieveQuoteStatus.class);
     }
 }

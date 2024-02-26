@@ -1,33 +1,27 @@
-## PSD2 Reference Implementation for Mastercard Cross-Border Services APIs
+## Reference Implementation for Mastercard Cross-Border Services APIs
   
-This is a reference application for PSD2 that demonstrates how Cross-border APIs can be used for the supported transaction types. Please see here for details on the APIs: [Mastercard Developers](https://developer.mastercard.com/cross-border-services/documentation/). 
+This is a reference application that demonstrates how Cross-border APIs can be used for the supported transaction types. Please see here for details on the APIs: [Mastercard Developers](https://developer.mastercard.com/cross-border-services/documentation/). 
 This application illustrates connecting to the cross-border APIs with / without encryption.
 Both the approaches require consumer key and .p12 file as received from [Mastercard Developers](https://developer.mastercard.com/dashboard).
 
 ### Frameworks / Libraries used
-
-- [Spring Framework](https://projects.spring.io/spring-framework/) 5.2.X
+- [Spring Framework](https://projects.spring.io/spring-framework/) 5.1.x  
   
 ### Requirements
-
-- Java 8
+- Java 8 and above  
 - Apache maven 3.5.x  
 - Set up the `JAVA_HOME` environment variable to match the location of your Java installation.  
-                                                   .  
   
 ### Setup  
-
 - Create an account at [Mastercard Developers](https://developer.mastercard.com/account/sign-up).  
 - Create a new project and add `Mastercard Cross-Border Services` API to your project.   
 - Configure project and download signing key. It will download the zip file.  
 - Select .p12 file from zip and copy it to `src\main\resources` in the project folder.
-- Generate client certificate(.PKCS12 or .PFX file) to establish mTLS connectivity. Contact customer support for more details.
 - Open `[project folder]\src\main\resources\mastercard-api.properties` and configure below parameters.
     
-    >**mastercard.api.environment.sandbox.endPoint URL for uk = https://sandbox.api.xbs.mastercard.uk/**, its a static field, will be used as a host to make API calls.
-    >**mastercard.api.environment.sandbox.endPoint URL for eu = https://sandbox.api.xbs.mastercard.eu/**, its a static field, will be used as a host to make API calls.
-
-    >**mastercard.api.environment.sandbox.partnerId=PSD2-OI-Payment**, this refers to partnerId of sandbox environment. This is a static field and need not be changed. If you wish, you can change it with your preferred partnerId.
+    >**mastercard.api.environment.sandbox.endPointURL=http://sandbox.api.mastercard.com**, its a static field, will be used as a host to make API calls.
+    
+    >**mastercard.api.environment.sandbox.partnerId=SANDBOX_1234567**, this refers to partnerId of sandbox environment. This is a static field and need not be changed. If you wish, you can change it with your preferred partnerId.
     
     **Below properties will be required for authentication of API calls.**
     
@@ -50,13 +44,11 @@ Both the approaches require consumer key and .p12 file as received from [Masterc
     >**mastercard.api.encryption.fingerPrint=**, this is the encryption key, required to encrypt a request.
        
     >**mastercard.api.decryption.keyFile=**, this is the .key file, required to decrypt a request. Add classpath for .key file, after placing it at src\main\resources in the project folder.
- 
- 
+      
 ### Build and Run   
 `Using IDE`
-
- - Open reference application in IDE and dependencies will be downloaded automatically. Open the maven window,
-	 -  Select MasterCard Cross-Border Services - Reference App
+ - Open project send-api-crossborder-ref-app and dependencies will be downloaded automatically. Open the maven window in IDE,
+	 -  Select MasterCard Send - XB - RefApp - API
 	 -  Select Life cycle 
 	 -  Run clean and install
 
@@ -64,19 +56,16 @@ Both the approaches require consumer key and .p12 file as received from [Masterc
   
 **Executing the use-cases in IDE**
 
-- Go to [project folder](\src\test\java\com\mastercard\crossborder\api), Open any .java file, ex. QuotesAPITest.java.  
+- Go to [project folder]\src\test\java\com\mastercard\crossborder\api, Open any .java file, ex. QuotesAPITest.java.  
 - Right click on any method in the class and run.  
 - Use cases will execute as per partnerId defined in mastercard-api.properties.
 >**Note: To change the input passed to APIs, modify values in CrossBorderAPITestHelper.java**  
 
 ### Use cases
-Main use cases in cross-border APIs are Quote, Payment, Retrieve payment and Cancel payment. Below are few variations. 
- 
-A] Request a quote:
--  [Request a quote for Uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-quotes-api/):
--  [Request a quote for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-quotes-api/):
+Main use cases in cross-border APIs are Quote, Payment, Retrieve payment and Cancel payment. Below are few variations.   
+A] [Request a quote](https://developer.mastercard.com/cross-border-services/documentation/api-ref/quotes-api/):
 
-   Below are the different flavours available for a quote transaction:
+Below are the different flavors available for a quote transaction:
 
 > Case 1:  **FORWARD QUOTE WITH FEES INCLUDED** 
 - Originating institute (OI) can make a forward quote request.  
@@ -107,19 +96,26 @@ e.g. If OI specifies beneficiary should receive 1000 INR(assuming beneficiary's 
 - In this case of reverse quote, OI needs to ensure the beneficiary receives a specific amount in beneficiary currency. Quotes response will provide the amount to be transferred by OI.
 e.g. If OI specifies beneficiary should receive 1000 INR(assuming beneficiary's currency is INR) as a fixed amount, OI will be asked to pay conversion of 1000 INR + fees as a quotes response.
 - Refer to #Usecase - 5 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
-    
-    
+
 > Case 6:  **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
 - Originating institute (OI) can initiate the request for a quote in Json format.  
 - This can be any type of quote, just that quotes request payload will be sent in encrypted form if property 'runWithEncryptedPayload' is set to True.
 - Quotes response will also be in encrypted form.
 - Refer to #Usecase - 6 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+ 
+> Case 7:  **QUOTES REQUEST WITH REVERSE QUOTE WITH CONFIRMATION EXPIRY TIME**
+- Originating institute (OI) can initiate the request for a quote in Json format.  
+- In this case of reverse quote, quote response will have "confirmation_expiry_time" field.
+- Refer to #Usecase - 7 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.   
+    
+> Case 8:  **QUOTES REQUEST WITH ENCRYPTION IN JSON FORMAT**
+- Originating institute (OI) can initiate the request for a quote in Json format. 
+- This use case uses quote request payload to get timeout response.
+- Refer to #Usecase - 8 in [QuotesAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuotesAPITest.java) for details.
+    
 
-B] Make payment:   
--  [Make payment for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-payment-api/): 
--  [Make payment for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-payment-api/): 
-
-   Payment can be made in two ways. Make payment using quote, One shot payment (payment without quotes).
+B] [Make payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/payment-api/):   
+Payment can be made in two ways. Make payment using quote, One shot payment (payment without quotes).
 
 > Case 1: **PAYMENT WITH FORWARD QUOTE**
 - OI wants to initiate quotes request to make a payment with quote. A quote can be forward or reverse.
@@ -161,7 +157,7 @@ B] Make payment:
 - OI wants to make a direct payment with any of the above types.
 - Whereas the payment can fail for various reasons.
 - This use case just shows one of the example of such failure.
-- You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-codes/) to understand different types of errors. 
+- You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-return-message-info/) to understand different types of errors. 
 - Please refer to #Usecase - 7 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
 > Case 8:  **PAYMENT WITH ENCRYPTION SUPPORTED**
@@ -181,14 +177,23 @@ B] Make payment:
 - OI wants to make a direct payment with any of the above types.
 - Whereas the payment can fail for various reasons.
 - This use case just shows one of the example of such failure where media type is Json.
-- You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-codes/) to understand different types of errors. 
+- You can refer [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-return-message-info/) to understand different types of errors. 
 - Please refer to #Usecase - 10 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
-C]  Retrieve payment:
--  [Retrieve payment for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-retrieve-payment-api/): 
--  [Retrieve payment for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-retrieve-payment-api/): 
+> Case 11:  **TIMEOUT FOR ONE SHOT PAYMENT**
+- OI wants to make one shot payment to handle timeout response.
+- This use case uses one shot payment request payload to get timeout response.
+- The response is verified by calling Retrieve payment API with transaction ref.
+- Please refer to #Usecase - 11 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
 
-   Status of a payment can be seen by retrieve payment API calls. There are two ways of knowing the details of payment,
+> Case 12: **TIMEOUT FOR PAYMENT WITH QUOTE**
+- OI wants to make payment with quote to handle timeout response.
+- This use case uses payment with quote request payload to get timeout response.
+- The response is verified by calling Retrieve payment API with transaction ref.
+- Please refer to #Usecase - 12 in [RemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java) for details.
+
+C] [Retrieve payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/retrieve-payment-api/):
+Status of a payment can be seen by retrieve payment API calls. There are two ways of knowing the details of payment,
 Get payment by ID and Get payment by reference.
 
 > Case 1: **RETRIEVE PAYMENT BY MASTERCARD PROVIDED ID**
@@ -212,11 +217,8 @@ Get payment by ID and Get payment by reference.
 - transaction_reference passed as input to payment can be used to get the payment details.  
 - Refer to #Usecase - 4 in [GetRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\GetRemittanceAPITest.java) for details.
 
-D] Cancel payment:
--  [Cancel payment for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-cancel-payment-api/):
--  [Cancel payment for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-cancel-payment-api/):
-
-   This facility of cancelling a payment is available only for some mobile money providers and cash-out. It is not available for banks account channels.
+D] [Cancel payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/cancel-payment-api/):
+This facility of cancelling a payment is available only for some mobile money providers and cash-out. It is not available for banks account channels.
 Payment can be cancelled if the payment is in 'Pending' status.
 > Case 1: **CANCEL A PAYMENT**
 - OI can cancel a payment by making Cancel payment API call. 
@@ -234,14 +236,11 @@ Payment can be cancelled if the payment is in 'Pending' status.
 - You can use the payment Id returned while making a payment. 
 - Refer to #Usecase - 3 in [CancelRemittanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\CancelRemittanceAPITest.java) for details.
 
-E] Carded Rate API:
--  [Carded Rate API for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-carded-rate-api/):
--  [Carded Rate API for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-carded-rate-api/):
-
-   Carded Rate is offered as an opt-in functionality to obtain the FX rates for the currency pairs that you, as the originating institution (OI) support, for a valid period of time.
+E] [Carded Rate API](https://developer.mastercard.com/cross-border-services/documentation/api-ref/carded-rate-api/):
+Carded Rate is offered as an opt-in functionality to obtain the FX rates for the currency pairs that you, as the originating institution (OI) support, for a valid period of time.
 
 - [FX Rate Pull](https://developer.mastercard.com/cross-border-services/documentation/api-ref/carded-rate-api/#fx-rate-pull):
-The FX Rate Pull API will require you to create a scheduler that will call this API based on the refresh times per currency pair provided by Mastercard Cross-Border services.
+The FX Rate Pull API will require you to create a scheduler that will call this API based on the refresh times per currency pair provided by Mastercard Send.
 This API supports only JSON.
 > Case 1: **PULL CARDED RATE**
 - OI can call this method to get FX rates
@@ -254,33 +253,186 @@ This API supports only JSON.
 - In this case, request payload is empty but the response payload will be encrypted.
 - Please refer to #Usecase - 2 in [PullCardedAPITest.java](./src\test\java\com\mastercard\crossborder\api\PullCardedAPITest.java) for details.
 
-### Authentication details 
+F] [Update Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/update-request-api/):
+Below are the different flavors available for a Update Request:
 
-Cross border APIs support OAuth2.0 request token based authentication for EU and UK domains. 
+> Case 1: **UPDATE REQUEST**
+- Originating institute (OI) can trigger an UpdateRequest for an RFI request it received
+- In this case OI is providing Name of sender and it will receive updated Request Status of REVIEW
+- Refer to #Usecase - 1 in [UpdateRequestAPITest.java](./src\test\java\com\mastercard\crossborder\api\UpdateRequestAPITest.java) for details.
 
-OAUTH2_REQUEST_TOKEN grant type is a special implementation by Mastercard. It is an authentication and authorization method implemented to allow consumer 
-application to consume Cross-Border Service APIs and it is one-legged auth implementation. It means your API request must contain a signed JWT token 
-(using token specification) as ‘Authorization’ header for authentication.
+> Case 2: **UPDATE REQUEST WITH ENCRYPTION**
+- Originating institute (OI) can initiate update request.
+- This can be any type of update, just that request payload will be sent in encrypted form if property 'runWithEncryptedPayload' is set to True.
+- Update response will also be in encrypted form.
+- Refer to #Usecase - 2 in [UpdateRequestAPITest.java](./src\test\java\com\mastercard\crossborder\api\UpdateRequestAPITest.java) for details.
 
+> Case 3: **ERROR HANDLING** 
+- OI wants to respond to an RFI request with any of the above types.
+- Whereas the request can fail for various reasons.
+- This use case just shows one of the example of such failure 
+- You can refer  [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-return-message-info/) to understand different types of errors.
+- Please refer to #Usecase - 3 in [UpdateRequestAPITest.java](./src\test\java\com\mastercard\crossborder\api\UpdateRequestAPITest.java) for details.
+
+G] [Upload Document Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/upload-document-api/):
+Below are the different flavors available for Upload Document
+
+> Case 1: **UPLOAD DOCUMENT**
+- Originating institute (OI) can trigger an UploadDocument to upload a document to MC system
+- In this case OI is uploading a docx file 
+- Refer to #Usecase - 1 in [UploadDocumentAPITest.java](./src\test\java\com\mastercard\crossborder\api\UploadDocumentAPITest.java) for details.
+
+> Case 2: **UPLOAD DOCUMENT WITH ENCRYPTION**
+- Originating institute (OI) can initiate upload Document request.
+- This can be any type request, just that request payload will be sent in encrypted form if property 'runWithEncryptedPayload' is set to True.
+- Response will also be in encrypted form.
+- Refer to #Usecase - 2 in [UploadDocumentAPITest.java](./src\test\java\com\mastercard\crossborder\api\UploadDocumentAPITest.java) for details.
+
+> Case 3: **ERROR HANDLING** 
+- OI wants to respond to an RFI request with any of the above types.
+- Whereas the request can fail for various reasons.
+- This use case just shows one of the example of such failure 
+- You can refer  [Error Codes](https://developer.mastercard.com/cross-border-services/documentation/api-ref/error-return-message-info/) to understand different types of errors.
+- Please refer to #Usecase - 3 in [UploadDocumentAPITest.java](./src\test\java\com\mastercard\crossborder\api\UploadDocumentAPITest.java) for details.
+
+H] [Download Document Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/download-document-api/):
+Below are the different flavors available for Download Document
+
+> Case 1: **Download Document**
+- Originating institute (OI) can trigger a DownloadDocument  request to get base64 encoded string  of a document from MC system
+- In this case OI downloads a file 
+- Refer to #Usecase - 1 in [DownloadDocumentAPITest.java](./src\test\java\com\mastercard\crossborder\api\DownloadDocumentAPITest.java) for details.
+
+> Case 2: **DOWNLOAD DOCUMENT WITH ENCRYPTION**
+- Originating institute (OI) can initiate download Document request.
+- This can be any type request, just that request payload will be sent in encrypted form if property 'runWithEncryptedPayload' is set to True.
+- In this case, request payload is empty but the response payload will be encrypted.
+- Refer to #Usecase - 2 in [DownloadDocumentAPITest.java](./src\test\java\com\mastercard\crossborder\api\DownloadDocumentAPITest.java) for details.
+
+I] [Retrieve Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/retrieve-request-api/): 
+Below are the different flavors available for Retrieve Request
+
+> Case 1: **RETRIEVE REQUEST** 
+- OI can call this method to know the status of a RFI request.
+- Payment Id returned while making a payment can be used to get the payment details.
+- Refer to #Usecase - 1 in  [RetrieveRequestAPITest.java](./src\test\java\com\mastercard\crossborder\api\RetrieveRequestAPITest.java) for details.
+
+> Case 2: **RETRIEVE REQUEST IN ENCRYPTED FORM**
+- OI can call this method to know the status of payment, made with or without quote.
+- Request ID returned in webhook notification while can be used to get the request details.
+- In this case, request payload is empty but the response payload will be encrypted.
+- Refer to #Usecase – 2 in  [RetrieveRequestAPITest.java](./src\test\java\com\mastercard\crossborder\api\RetrieveRequestAPITest.java) for details.
+
+J] [Balance API](https://developer.mastercard.com/cross-border-services/documentation/api-ref/balance-api/):
+ There are two ways of fetching the details of Accounts and Balances,
+Get All Accounts Balances and Get account balance by ID.
+
+> Case 1: ** RETRIEVE ALL ACCOUNTS BALANCES FOR OI WITH BALANCE INCLUDED **
+- OI can call this method to know the  details of all Account Balances.
+- For balance api we need to pass partner-id and query param include_balance=true.  
+- Refer to #Usecase - 1 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+- If Balance details contains Queued Balance then 
+	Customer is enrolled for Prefund queuing so queued balance is provided in balance details response.
+
+> Case 2: ** RETRIEVE ACCOUNT BALANCES BY ACCOUNTID WITH BALANCE INCLUDED **
+- OI can call this method to know the  details of Account Balances for particuler account.
+- For balance api we need to pass partner-id and query param include_balance=true and Account id.  
+- Refer to #Usecase - 2 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+- If Balance details contains Queued Balance then 
+	Customer is enrolled for Prefund queuing so queued balance is provided in balance details response.
+
+> Case 3: ** RETRIEVE ALL ACCOUNT BALANCES FOR OI WITH ENCRYPTION WITH BALANCE INCLUDED **
+- OI can call this method to know the  details of all Account Balances with Encryption.
+- For balance api we need to pass partner-id and query param include_balance=true.  
+- Refer to #Usecase - 3 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+
+> Case 4: ** RETRIEVE ACCOUNT BALANCES BY ACCOUNTID WITH ENCRYPTION WITH BALANCE INCLUDED **
+- OI can call this method to know the  details of Account Balances for particuler account with Encryption.
+- For balance api we need to pass partner-id and query param include_balance=true and Account id.  
+- Refer to #Usecase - 4 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+
+> Case 5: ** RETRIEVE ALL ACCOUNTS BALANCES FOR OI WITH BALANCE NOT INCLUDED **
+- OI can call this method to know the  details of all Accounts Without Balances.
+- For this we need to pass partner-id and query param include_balance=false.  
+- Refer to #Usecase - 5 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+
+> Case 6: ** RETRIEVE ACCOUNT BALANCES BY ACCOUNTID WITH BALANCE NOT INCLUDED **
+- OI can call this method to know the  details of Account Balances for particuler account.
+- For this we need to pass partner-id and query param include_balance=false and Account id.  
+- Refer to #Usecase - 6 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+
+> Case 7: ** RETRIEVE ALL ACCOUNT BALANCES FOR OI WITH ENCRYPTION WITH BALANCE NOT INCLUDED **
+- OI can call this method to know the  details of all Account Balances with Encryption.
+- For this we need to pass partner-id and query param include_balance=false.  
+- Refer to #Usecase - 7 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+
+> Case 8: ** RETRIEVE ACCOUNT BALANCES BY ACCOUNTID WITH ENCRYPTION WITH BALANCE NOT INCLUDED **
+- OI can call this method to know the  details of Account Balances for particuler account with Encryption.
+- For this we need to pass partner-id and query param include_balance=false and Account id.  
+- Refer to #Usecase - 8 in [BalanceAPITest.java](./src\test\java\com\mastercard\crossborder\api\BalanceAPITest.java) for details.
+
+K] [Quote Confirmation API](https://developer.mastercard.com/cross-border-services/documentation/api-ref/quote-confirmation-apis/):
+
+Below are the different flavors available for a quote confirmation transaction:
+
+> Case 1:  **QUOTE CONFIRMATION** 
+- Originating institute (OI) can make a quote confirmation request.  
+- OI can call this method to confirm the FX rate quote that you received in the Quotes API. This confirmation is mandatory prior to submitting a payment transaction. 
+  The Quote Confirmation needs to be done within the ‘confirmationExpiryTime’ that is received in the Quotes API response
+- For this we need to pass partner-id, Proposal Id and Transaction Reference which we get as response from Quotes API.
+- Refer to #Usecase - 1 in [QuoteConfirmationAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuoteConfirmationAPITest.java) for details.  
+
+> Case 2:  **CANCEL CONFIRMED QUOTE**
+- Originating institute (OI) can make cancel confirmed quote request.  
+- OI can call this method to cancel a confirmed FX rate quote/proposal. If Confirmed Quote cancellation is sent before the payment initiation, the cancellation will result in return of reserved funds. 
+  If cancellation is sent after payment initiation, the Confirmed Quote Cancellation will be declined. 
+- For this we need to pass partner-id, Proposal Id and Transaction Reference of quote whose status is CONFIRMED which we get as response from Quotes API which is Confirmed using Quote Confirmation API.
+- Refer to #Use case - 2 in [QuoteConfirmationAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuoteConfirmationAPITest.java) for details.  
+
+> Case 3:  **CANCEL QUOTE WITHOUT CONFIRMATION**
+- Originating institute (OI) can make cancel quote without confirmation request.  
+- OI can call this method to cancel a non confirmed FX rate quote/proposal.
+- For this we need to pass partner-id, Proposal Id and Transaction Reference of quote whose status is CONFIRMED which we get as response from Quotes API which is Confirmed using Quote Confirmation API.
+- Refer to #Use case - 3 in [QuoteConfirmationAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuoteConfirmationAPITest.java) for details.  
+
+> Case 4:  **RETRIEVE CONFIRMED QUOTE** 
+- Originating institute (OI) can make a retrieve quote confirmation request.  
+- OI can call this method to retrieve confirmed quote. OI need to opt-in Quote Confirmation Suite.
+- For this we need to pass partner-id, Proposal Id and Transaction Reference which we get as response from Quotes API.
+- Refer to #Usecase - 4 in [QuoteConfirmationAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuoteConfirmationAPITest.java) for details.  
+  
+> Case 5:  **RETRIEVE CANCELLED QUOTE** 
+- Originating institute (OI) can make a retrieve cancelled quote request.  
+- OI can call this method to retrieve cancelled quote. OI need to opt-in Quote Confirmation Suite.
+- For this we need to pass partner-id, Proposal Id and Transaction Reference which we get as response from Quotes API.
+- Refer to #Usecase - 5 in [QuoteConfirmationAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuoteConfirmationAPITest.java) for details.  
+  
+> Case 6:  **QUOTE CONFIRMATION WITH ENCRYPTION** 
+- Originating institute (OI) can make a quote confirmation request with encryption.
+- OI can call this method to confirm the FX rate quote that you received in the Quotes API. This confirmation is mandatory prior to submitting a payment transaction. 
+  The Quote Confirmation needs to be done within the ‘confirmationExpiryTime’ that is received in the Quotes API response
+- For this we need to pass partner-id, Proposal Id and Transaction Reference which we get as response from Quotes API.
+- Refer to #Usecase - 6 in [QuoteConfirmationAPITest.java](./src\test\java\com\mastercard\crossborder\api\QuoteConfirmationAPITest.java) for details.  
+
+                                                
 ### Implementation details for cross-border APIs
-
 To develop a client application using cross border APIs, refer below documentation. All the cross-border APIs are REST APIs that support both XML and JSON as a payload.   
 
-- [Request a quote for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-quotes-api/) (HTTP POST)
-- [Request a quote for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-quotes-api/) (HTTP POST)
-
-- [Make payment for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-payment-api/) (HTTP POST)
-- [Make payment for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-payment-api/) (HTTP POST)
-
-
-- [Retrieve payment for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-retrieve-payment-api/) (HTTP GET)
-- [Retrieve payment for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-retrieve-payment-api/) (HTTP GET)
-
-- [Cancel payment for uk](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-uk-cancel-payment-api/) (HTTP POST)
-- [Cancel payment for eu](https://developer.mastercard.com/cross-border-services/documentation/api-ref/psd2-eu-cancel-payment-api/) (HTTP POST)
-
+- [Request a quote](https://developer.mastercard.com/cross-border-services/documentation/api-ref/quotes-api/) (HTTP POST)
+- [Make payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/payment-api/) (HTTP POST)
+- [Retrieve payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/retrieve-payment-api/) (HTTP GET)
+- [Cancel payment](https://developer.mastercard.com/cross-border-services/documentation/api-ref/cancel-payment-api/) (HTTP POST)
+- [Balance Api](https://developer.mastercard.com/cross-border-services/documentation/api-ref/balance-api/) (HTTP GET)
+- [Quote confirmation Api](https://developer.mastercard.com/cross-border-services/documentation/api-ref/quote-confirmation-apis/) (HTTP POST)
 
 To understand implementation details, you can refer to makePayment() in [RemittanceAPI.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java).
+
+The below Cross Border APIs support JSON payload
+###	RFI API’s
+- [Update Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/update-request-api/) (HTTP POST)
+- [Upload Document Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/upload-document-api/) (HTTP POST)
+- [Download Document Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/download-document-api/) (HTTP GET)
+- [Retrieve Request](https://developer.mastercard.com/cross-border-services/documentation/api-ref/rfi-apis/retrieve-request-api/) (HTTP GET)
 
 ### Implementation details for cross-border APIs that support encryption
 
@@ -305,11 +457,66 @@ Cross border APIs support JWE encryption. To develop an application that uses cr
 
 **Step4**: Make an API call Pass with this encrypted request entity and you will get the encrypted response.
 
-**Step5**: You can decrypt the response by calling EncryptionUtils.jweDecrypt(). Parameters required for decryption are key (.key) file. For more information on decryption keys, contact mastercard support team. There are multiple ways of decrypting a response. Reference implementation talks about only one type of decryption. Please refer https://developer.mastercard.com/cross-border-services/documentation/api-ref/encryption/ for more details.
+**Step5**: You can decrypt the response by calling EncryptionUtils.jweDecrypt(). Parameters required for decryption are key (.key) file. For more information on decryption keys, contact mastercard support team. There are multiple ways of decrypting a response. Reference implementation talks about only one type of decryption. Please refer https://developer.mastercard.com/page/generate-the-private-and-public-key-for-use-with-sdk-for-authorization-api for more details.
 
 To understand implementation details of encryption and decryption, you can refer to makePaymentWithEncryption() in [RemittanceAPI.java](./src\test\java\com\mastercard\crossborder\api\RemittanceAPITest.java).
 
 
+### Below are the APIs and their cases for the VAS application - Bank Account Validation
 
+L] [Bank Info Lookup API](https://developer.mastercard.com/send-cross-border/documentation/api-ref/bank-account-validation-api#bank-information-lookup-api):
 
+> Case 1: **RETRIEVE BANK DETAILS WITH ALL INPUT FIELDS POPULATED**
+- OI can call this method to retrieve the bank information
+- In this use case, we need to pass partner ID and populate all the fields of the API. Bank Info API will provide a response as per the input.
+- Use case link
 
+> Case 2: **RETRIEVE BANK DETAILS WITH COUNTRY AND BANK NAME** 
+- OI can call this method to retrieve the bank information
+- In this use case, we need to pass partner-id along with country and bank name.
+- Bank Info API will provide response with more than one bank records.
+- Use case link
+
+> Case 3: **RETRIEVE BANK DETAILS WITH COUNTRY AND BIC DETAILS** 
+- OI can call this method to retrieve the bank information
+- In this use case, we need to pass partner-id along with country and bic details. Bank Info API will provide a response as per the input.
+- Use case link
+
+> Case 4: **ERROR HANDLING**
+- OI calls the service to retrieve Bank Information but the mandatory field is null, use case 4
+- OI calls the service to retrieve Bank Information but there are no matching records for the input criteria, use case 10
+- The above use cases just shows two the examples of error handling
+
+M] [Validate IBAN API](https://developer.mastercard.com/send-cross-border/documentation/api-ref/validate-iban-apis#account-validation-api):
+
+> Case 1: **VALIDATE ACCOUNT WITH ACCOUNT TYPE AND VALUE** 
+- OI can call this method to validate the IBAN account
+- In this use case, we need to pass partner ID and populate all the account type and value. The service provides a successful or rejection response.
+- Use case link
+
+> Case 2: **ERROR HANDLING**
+- OI calls the service to Validate the account but the value field is null, use case 14
+- OI calls the service to Validate the account but the account number contains invalid check digit,
+- The above use cases just shows two of the examples of error handling
+
+N] [Generate IBAN API](https://developer.mastercard.com/send-cross-border/documentation/api-ref/generate-iban-apis#iban-generation-api):
+
+> Case 1: **GENERATE EXISTING IBAN ACCOUNT WITH ACCOUNT AND BANK DETAILS**
+- OI can call this method to generate an existing valid IBAN account
+- In this use case, we need to pass partner ID and populate all the fields in the API. A successful response would result will contain a valid IBAN.
+- Use case link
+
+> Case 2: **GENERATE EXISTING IBAN WITH ACCOUNT URI ONLY**
+- OI can call this method to generate an existing valid IBAN account
+- In this use case, we need to pass partner ID and populate the account URI only. A successful response would result will contain a valid IBAN.
+- Use case link
+
+> Case 3: **GENERATE EXISTING IBAN WITH COUNTRY, BRANCH CODE AND ACCOUNT NUMBER**
+- OI can call this method to generate an existing valid IBAN account
+- In this use case, we need to pass partner ID and populate the country, branch and account number. A successful response would result will contain a valid IBAN.
+- Use case link
+
+> Case 4: **ERROR HANDLING**
+- OI calls the service to generate the IBAN but the country is not entered in acceptable format, use case 14
+- OI calls the service to generate the IBAN but the Bank Identifier is incorrect, use case 15
+- The above use cases just shows two the examples of error handling

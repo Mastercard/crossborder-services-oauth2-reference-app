@@ -1,12 +1,14 @@
 package com.mastercard.crossborder.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+@JsonTypeName(value = "PrincipalAmount")
 @XmlType(name = "principal_amount", propOrder = {"prinAmt", "prinCurr"})
 @XmlRootElement(name = "principal_amount")
 public class PrincipalAmount implements Serializable {

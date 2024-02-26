@@ -25,18 +25,18 @@ public class CancelRemittanceAPI {
     public static final String CANCEL_REMITTANCE = "/send/v1/partners/{partner-id}/crossborder/{payment-id}/cancel";
 
     @Autowired
-    RestClientService<CancelResponse> restClientService;
+    RestClientService restClientService;
 
     public CancelResponse cancelPayment(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
          logger.info("Calling cancel payment API");
-         return restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
+         return (CancelResponse) restClientService.service(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
 
 
     }
 
     public CancelResponse cancelPaymentWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
         logger.info("Calling cancel payment API that supports encryption ");
-        return restClientService.serviceEncryption(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
+        return (CancelResponse) restClientService.serviceEncryption(CANCEL_REMITTANCE, headers, HttpMethod.POST, requestParams, cancelRequest, CancelResponse.class);
 
     }
 

@@ -1,16 +1,14 @@
 package com.mastercard.crossborder.api.rest.response;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.mastercard.crossborder.api.rest.request.UpdateRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @JsonTypeName(value = "retrieveResponse")
 @JsonPropertyOrder(value = {"assignee", "creator", "firstResponseDate", "lastUpdatedDate", "other", "paymentAndDocs", "recipient", "requestCreateDate", "requestId","requestInstruction", "requestStatus","responseType", "sender","transactions","closureDate"})
-public class RetrieveResponse extends UpdateRequest implements Serializable {
+public class RetrieveResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +23,10 @@ public class RetrieveResponse extends UpdateRequest implements Serializable {
     private String requestStatus;
     private String responseType;
     private List<Transactions> transactions =  new ArrayList<>();
+    private Sender sender;
+    private Recipient recipient;
+    private PaymentAndDocs paymentAndDocs;
+    private Other other;
 
     @JsonProperty(value = "assignee")
     public String getAssignee() {
@@ -123,6 +125,42 @@ public class RetrieveResponse extends UpdateRequest implements Serializable {
 
     public void setTransactions(List<Transactions> transactions) {
         this.transactions = transactions;
+    }
+
+    @JsonProperty(value = "sender")
+    public Sender getSender() {
+        return sender;
+    }
+
+    @JsonProperty(value = "recipient")
+    public Recipient getRecipient() {
+        return recipient;
+    }
+
+    public void setSender(Sender sender) {
+        this.sender = sender;
+    }
+
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
+    }
+
+    @JsonProperty(value = "paymentAndDocs")
+    public PaymentAndDocs getPaymentAndDocs() {
+        return paymentAndDocs;
+    }
+
+    public void setPaymentAndDocs(PaymentAndDocs paymentAndDocs) {
+        this.paymentAndDocs = paymentAndDocs;
+    }
+
+    @JsonProperty(value = "other")
+    public Other getOther() {
+        return other;
+    }
+
+    public void setOther(Other other) {
+        this.other = other;
     }
 
 }

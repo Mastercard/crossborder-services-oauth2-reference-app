@@ -1,6 +1,7 @@
 package com.mastercard.crossborder.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonTypeName(value = "Data")
 @XmlType(name = "data", propOrder = {"dataFields"})
 @XmlRootElement(name = "data")
 public class Data implements Serializable {

@@ -1,12 +1,14 @@
 package com.mastercard.crossborder.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+@JsonTypeName(value = "AdditionalDataList")
 @XmlType(name = "additionalDataList", propOrder = {"resourceType", "itemCount","data"})
 @XmlRootElement(name = "additionalDataList")
 public class AdditionalDataList implements Serializable {

@@ -59,7 +59,7 @@ public class GetRemittanceAPITest  {
     public void testGetPaymentByIdAfterSuccessfulPayment() {
         logger.info("Running Usecase - 1, RETRIEVE PAYMENT BY MASTERCARD PROVIDED ID.");
         try {
-            Map<String, Object> paymentParams = new HashMap<String, Object>();
+            Map<String, Object> paymentParams = new HashMap<>();
             paymentParams.put(partnerIdStr, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
@@ -99,7 +99,7 @@ public class GetRemittanceAPITest  {
         logger.info("Running Usecase - 2, RETRIEVE PAYMENT BY OI PROVIDED TRANSACTION REFERENCE ID.");
         try {
             Map<String, Object> paymentParams = new HashMap<>();
-            paymentParams.put(partnerIdStr, "partnerId");
+            paymentParams.put(partnerIdStr, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
             RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForReverseQuote();
@@ -107,7 +107,6 @@ public class GetRemittanceAPITest  {
             if (null != paymentDetails) {
                 //transaction_reference can also be used from request, paymentRequest.getTransactionReference()
                 String transactionReference = paymentDetails.getTransactionReference();
-
                 Map<String, Object> requestParams = new HashMap<>();
                 requestParams.put(partnerIdStr, partnerId);
                 requestParams.put("payment-reference", transactionReference);
@@ -180,8 +179,8 @@ public class GetRemittanceAPITest  {
     public void testGetPaymentByReferenceInJsonFormat() {
         logger.info("Running Usecase - 4, RETRIEVE PAYMENT BY OI PROVIDED TRANSACTION REFERENCE ID IN JSON FORMAT.");
         try {
-            Map<String, Object> paymentParams = new HashMap<String, Object>();
-            paymentParams.put(partnerIdStr, "partnerId");
+            Map<String, Object> paymentParams = new HashMap<>();
+            paymentParams.put(partnerIdStr, partnerId);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
             RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForReverseQuote();
@@ -190,7 +189,8 @@ public class GetRemittanceAPITest  {
                 //transaction_reference can also be used from request, paymentRequest.getTransactionReference()
                 String transactionReference = paymentDetails.getTransactionReference();
                 if (!Strings.isBlank(transactionReference)) {
-                    Map<String, Object> requestParams = new HashMap<String, Object>();
+                    Map<String, Object> requestParams = new HashMap<>();
+                    headers.add(HttpHeaders.ACCEPT,MediaType.APPLICATION_JSON);
                     requestParams.put(partnerIdStr, partnerId);
                     requestParams.put("payment-reference", transactionReference);
 

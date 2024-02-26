@@ -2,12 +2,14 @@ package com.mastercard.crossborder.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+@JsonTypeName(value = "DataFields")
 @JsonPropertyOrder(value = {"fieldId", "value"})
 @XmlType(name = "dataFields", propOrder = {"fieldId", "value"})
 @XmlRootElement(name = "dataFields")

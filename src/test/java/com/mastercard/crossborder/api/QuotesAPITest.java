@@ -1,12 +1,13 @@
 package com.mastercard.crossborder.api;
 
-import com.mastercard.crossborder.api.helper.CrossBorderAPITestHelper;
-import com.mastercard.crossborder.api.rest.request.QuotesRequest;
-import com.mastercard.crossborder.api.rest.response.Proposal;
-import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
+import com.mastercard.crossborder.api.helper.CrossBorderAPITestHelper;
 import com.mastercard.crossborder.api.rest.QuotesAPI;
+import com.mastercard.crossborder.api.rest.request.QuotesRequest;
+import com.mastercard.crossborder.api.rest.response.Error;
+import com.mastercard.crossborder.api.rest.response.Proposal;
+import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,14 +15,18 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.http.HttpHeaders;
 
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /*
    Quotes:-
@@ -67,7 +72,7 @@ public class QuotesAPITest {
                 logger.info("ProposalId for the quotes are : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
                 //This is to verify that the payment amount and the charged amount are equal when fees are included in the quote request
-                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()),Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getAmount()));
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()),Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getChrgAmt()));
 
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
@@ -100,9 +105,9 @@ public class QuotesAPITest {
                 logger.info("ProposalId for the quotes are : {}", ((Proposal) proposal.get()).getProposalId());
                 Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
                 //This is to verify that the charged amount is greater than the payment amount when fees are not included in the quote request
-                Assert.assertTrue(Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getAmount()) > Double.valueOf(request.getRemittanceAmount().getAmount()));
+                Assert.assertTrue(Double.valueOf(((Proposal) proposal.get()).getChargedAmount().getChrgAmt()) > Double.valueOf(request.getRemittanceAmount().getAmount()));
                 //This is to verify that the payment amount and the principal amount are equal when fees are not included in the quote request
-                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getPrincipalAmount().getAmount())));
+                Assert.assertEquals(Double.valueOf(request.getRemittanceAmount().getAmount()), Double.valueOf((((Proposal) proposal.get()).getPrincipalAmount().getPrinAmt())));
             } else {
                 logger.info("Quotes request has failed, ProposalId does not exist");
                 Assert.fail("Quotes request has failed, ProposalId does not exist");
@@ -241,6 +246,62 @@ public class QuotesAPITest {
         }
         else
             logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
+    }
+
+    /*
+       #Usecase - 7 - **REVERSE QUOTE WITH CONFIRMATION EXPIRY TIME**
+     */
+    @Test
+    public void testRequestReverseQuoteWithConfirmationExpiryTime() {
+        logger.info("Running Usecase - 7, REVERSE QUOTE WIH CONFIRMATION EXPIRY TIME");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        /* set the input */
+        try {
+            QuotesRequest request = CrossBorderAPITestHelper.setDataForReverseQuote();
+            QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
+            Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
+            if ( proposal.isPresent()) {
+                logger.info("Quotes request is successful, ProposalId : {}", ((Proposal) proposal.get()).getProposalId());
+                Assert.assertNotNull(((Proposal) proposal.get()).getProposalId());
+            } else {
+                logger.info("Quotes request has failed, ProposalId does not exist");
+                Assert.fail("Quotes request has failed, ProposalId does not exist");
+            }
+        }
+        catch (ServiceException re){
+            logger.error("Quotes request failed as : {}", re.getMessage());
+            Assert.fail(re.getMessage());
+        }
+    }
+
+    /*
+     *  #Usecase - 8 - **TIMEOUT CASE FOR QUOTE**
+     * */
+    @Test
+    public void testTimeoutForQuote() {
+        logger.info("Running Usecase - 8, Quote with timeout case");
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("partner-id", partnerId);
+        try {
+            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncludedForTimeout();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
+            quotesAPI.getQuote(headers, requestParams, request);
+            Assert.fail("Quote request did not timeout");
+        } catch (ServiceException re) {
+            if (re != null && re.getErrors() != null && re.getErrors().getErrorList() != null && !re.getErrors().getErrorList().isEmpty() ) {
+                logger.error("Quote processing has timed out {}", re.getMessage());
+                String source = re.getErrors().getErrorList().get(0).getSource();
+                assertThat(source, anyOf(is("Service"), is("Gateway")));
+            }
+            else{
+                Assert.fail("Exepcted exception not received");
+            }
+        }
     }
 
 }

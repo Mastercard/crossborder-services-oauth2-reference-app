@@ -16,7 +16,7 @@ public class AdditionalField implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<AdditionalDataField> data = new ArrayList<AdditionalDataField>();
+    private List<AdditionalDataField> data = new ArrayList<>();
 
     @JsonProperty(value = "data_field")
     @XmlElement(name = "data_field", required = true)
