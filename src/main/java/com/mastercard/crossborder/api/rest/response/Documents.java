@@ -1,7 +1,7 @@
 package com.mastercard.crossborder.api.rest.response;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ public class Documents implements Serializable {
 
     private Request request;
     private Review review;
-    private Response<Object> response;
+    private Response response;
 
     @JsonProperty(value = "request")
     public Request getRequest() {
@@ -34,11 +34,11 @@ public class Documents implements Serializable {
     }
 
     @JsonProperty(value = "response")
-    public Response<Object> getResponse() {
+    public Response getResponse() {
         return response;
     }
 
-    public void setResponse(Response<Object> response) {
+    public void setResponse(Response response) {
         this.response = response;
     }
 }

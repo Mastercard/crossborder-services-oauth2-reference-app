@@ -1,6 +1,7 @@
 package com.mastercard.crossborder.api.rest.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class FullAddress implements Serializable {
     private String countrySubdivision;
     private String country;
     private String postalCode;
-    private transient List< Object > documents = new ArrayList< Object >();
+    private List< Object > documents = new ArrayList< Object >();
 
     @JsonProperty(value = "addressLine1")
     public String getAddressLine1() {

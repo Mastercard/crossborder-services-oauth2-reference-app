@@ -21,7 +21,7 @@ import java.util.Map;
 public class QuotesAPI {
 
     @Autowired
-    RestClientService<QuotesResponse> restClientService;
+    RestClientService restClientService;
 
     private static final Logger logger = LoggerFactory.getLogger(QuotesAPI.class);
 
@@ -29,12 +29,12 @@ public class QuotesAPI {
 
     public QuotesResponse getQuote(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
         logger.info("Calling Quotes API");
-        return restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
+        return (QuotesResponse) restClientService.service(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
 
     }
     public QuotesResponse getQuoteWithEncryption(HttpHeaders headers, Map<String, Object> requestParams, QuotesRequest quotesRequest) throws ServiceException {
         logger.info("Calling Quotes API");
-        return restClientService.serviceEncryption(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
+        return (QuotesResponse) restClientService.serviceEncryption(QUOTES, headers, HttpMethod.POST, requestParams, quotesRequest, QuotesResponse.class);
     }
 
 }
