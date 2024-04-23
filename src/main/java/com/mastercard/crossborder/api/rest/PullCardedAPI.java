@@ -16,7 +16,7 @@ public class PullCardedAPI {
 
 
     @Autowired
-    RestClientService<FxRateResponse> restClientService;
+    RestClientService restClientService;
 
     private static final Logger logger = LoggerFactory.getLogger(PullCardedAPI.class);
 
@@ -25,13 +25,13 @@ public class PullCardedAPI {
 
     public FxRateResponse getFxRates(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException{
         logger.info("Calling retrieve FX Rates API");
-        return restClientService.service(FXRATE, headers, HttpMethod.GET, requestParams,null, FxRateResponse.class);
+        return (FxRateResponse) restClientService.service(FXRATE, headers, HttpMethod.GET, requestParams,null, FxRateResponse.class);
     }
 
 
     public FxRateResponse  getFxRatesEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve FX Rates API");
-        return restClientService.serviceEncryption(FXRATE, headers, HttpMethod.GET, requestParams, null, FxRateResponse.class);
+        return (FxRateResponse) restClientService.serviceEncryption(FXRATE, headers, HttpMethod.GET, requestParams, null, FxRateResponse.class);
     }
 }

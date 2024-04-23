@@ -1,8 +1,8 @@
 package com.mastercard.crossborder.api.rest.response;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.mastercard.crossborder.api.rest.request.RequestDocuments;
+
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,9 @@ public class Other implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    transient List<Comments> comments = new ArrayList<>();
+    List<Comments> comments = new ArrayList();
     ResponseDocuments responseDocuments;
-    transient RequestDocuments requestDocuments;
+    RequestDocuments requestDocuments;
 
     @JsonProperty(value = "comments")
     public List<Comments> getComments() {
