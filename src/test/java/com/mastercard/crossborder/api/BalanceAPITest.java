@@ -1,10 +1,10 @@
 package com.mastercard.crossborder.api;
 
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
-
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.BalanceAPI;
 import com.mastercard.crossborder.api.rest.response.accountbalances.Account;
+import com.mastercard.crossborder.api.service.RestClientService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,14 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.Assert.assertNotNull;
-
 
 /*
     This class is to get Accounts Balances API.
@@ -42,6 +39,9 @@ public class BalanceAPITest {
     @Autowired
     MastercardApiConfig apiConfig;
 
+    @Autowired
+    RestClientService restClientService;
+
     private static final Logger logger = LoggerFactory.getLogger(BalanceAPITest.class);
 
     private static final String partnerIdStr = "partner-id";
@@ -60,7 +60,7 @@ public class BalanceAPITest {
         #Usecase - 1 - **RETRIEVE ACCOUNTS BALANCES BY MASTERCARD PROVIDED ID WITH BALANCE INCLUDED**
 
     */
-   @Test
+    @Test
     public void testGetAllAccntsBalancesWithIncludeBalanceTrue() {
         logger.info("Running Usecase - 1, RETRIEVING ACCOUNTS BALANCES BY MASTERCARD PROVIDED ID WITH BALANCE INCLUDED.");
         try {
@@ -105,8 +105,6 @@ public class BalanceAPITest {
             if (null == accountResponse) {
                 logger.info("Retrieve Accounts Balance by Account-ID  with balance included has failed");
                 Assert.fail("Retrieve Accounts Balance by Account-ID with balance included has failed");
-                
-                
             } else {
                 logger.info("Retrieve Accounts Balances by Account ID with balance included is Successful with account_Id {}", accountResponse.getAccountId());
                 if(accountResponse.getBalanceDetails()!=null && accountResponse.getBalanceDetails().getQueuedBalance()!=null) {
@@ -145,8 +143,8 @@ public class BalanceAPITest {
             }
 
         } catch (ServiceException re) {
-        	    Assert.fail(re.getMessage());
-                logger.error("Retrieve Balance by PartnerID With Encryption balance included has failed {}", re.getMessage());
+            Assert.fail(re.getMessage());
+            logger.error("Retrieve Balance by PartnerID With Encryption balance included has failed {}", re.getMessage());
         }
     }
      /*
@@ -298,6 +296,4 @@ public class BalanceAPITest {
         else
             logger.info("To run this use cases, Set runWithEncryptedPayload=true and other encryption / decryption keys in mastercard-api.properties.");
     }
-
-   
 }

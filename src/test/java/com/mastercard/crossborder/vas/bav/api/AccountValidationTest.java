@@ -71,7 +71,7 @@ public class AccountValidationTest {
         }
     }
 
-  /*  **
+    /*  **
      * This is an error scenario test case, where the mandatory field i.e the type is sent as "" empty
      */
     @Test

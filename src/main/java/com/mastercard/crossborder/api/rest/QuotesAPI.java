@@ -21,7 +21,7 @@ import java.util.Map;
 public class QuotesAPI {
 
     @Autowired
-    RestClientService restClientService;
+    RestClientService<QuotesResponse> restClientService;
 
     private static final Logger logger = LoggerFactory.getLogger(QuotesAPI.class);
 

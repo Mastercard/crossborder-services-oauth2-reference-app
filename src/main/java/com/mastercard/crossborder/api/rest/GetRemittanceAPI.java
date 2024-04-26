@@ -27,23 +27,23 @@ public class GetRemittanceAPI {
     public static final String GET_PAYMENT_BY_REF = "/send/v1/partners/{partner-id}/crossborder?ref={payment-reference}";
 
     @Autowired
-    RestClientService restClientService;
+    RestClientService<RemittanceResponse> restClientService;
 
 
     public RemittanceResponse  getPaymentById(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by ID API");
-        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams,null, RemittanceResponse.class);
+        return restClientService.service(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams,null, RemittanceResponse.class);
     }
     public RemittanceResponse getPaymentByRef(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by reference API");
-        return (RemittanceResponse) restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams,null,  RemittanceResponse.class);
+        return restClientService.service(GET_PAYMENT_BY_REF, headers, HttpMethod.GET, requestParams,null,  RemittanceResponse.class);
     }
 
     public RemittanceResponse  getPaymentByIdWithEncryption(HttpHeaders headers, Map<String, Object> requestParams) throws ServiceException {
 
         logger.info("Calling retrieve payment by ID API");
-        return (RemittanceResponse) restClientService.serviceEncryption(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class);
+        return restClientService.serviceEncryption(GET_PAYMENT_BY_ID, headers, HttpMethod.GET, requestParams, null, RemittanceResponse.class);
     }
 }

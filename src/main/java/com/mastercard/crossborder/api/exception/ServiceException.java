@@ -8,6 +8,11 @@ public class ServiceException extends Exception{
     {
         super(errorMessage);
     }
+   /* public ServiceException(String errorMessage, Errors serviceErrors)
+    {
+        super(errorMessage);
+        errors.setError(serviceErrors.getError());
+    }*/
 
     public ServiceException(String errorMessage, Errors serviceErrors)
     {

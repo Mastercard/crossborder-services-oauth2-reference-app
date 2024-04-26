@@ -11,7 +11,6 @@ public class BalanceDetails implements Serializable {
     private ProcessedAmount processedAmount;
     private ReservedBalance reservedBalance;
     private AvailableBalance availableBalance;
-
     private SettlementAccountBalance settlementAccountBalance;
     private ThresholdAmount thresholdAmount;
     private List<BalanceThreshold> thresholds;

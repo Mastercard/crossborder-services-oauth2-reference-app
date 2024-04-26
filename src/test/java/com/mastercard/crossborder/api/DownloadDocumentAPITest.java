@@ -1,11 +1,11 @@
 package com.mastercard.crossborder.api;
+
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.DownloadDocumentAPI;
 import com.mastercard.crossborder.api.rest.response.DownloadDocumentResponse;
 import com.mastercard.crossborder.api.rest.response.Error;
 import com.mastercard.crossborder.api.rest.response.Errors;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -110,7 +110,7 @@ public class DownloadDocumentAPITest {
         requestParams.put("document_id","d0b7db34-eff8-47fa-b707-2ad12929f0a8");
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
 
         try {
             DownloadDocumentResponse downloadDocumentResponse = downloadDocumentAPI.downloadDocumentById(headers, requestParams);

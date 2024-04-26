@@ -175,7 +175,7 @@ public class BankInfoLookupTest {
             logger.error("Bank Validation is failed due to Invalid length");
             Assert.fail("Bank Validation is failed due to Invalid length");
         } catch (ServiceException serviceException) {
-           Errors errors = serviceException.getErrors();
+            Errors errors = serviceException.getErrors();
             List<Error> errorList = errors.getErrorList();
             System.out.println("Error Response >>>>>>>>>>>>>>>> "+errorList.get(0));
             System.out.println("Error Response >>>>>>>>>>>>>>>> "+errorList.get(1));

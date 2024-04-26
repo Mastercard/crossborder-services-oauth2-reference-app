@@ -1,4 +1,5 @@
 package com.mastercard.crossborder.api.rest;
+
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.request.QuoteConfirmation;
 import com.mastercard.crossborder.api.rest.response.QuoteConfirmationResponse;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+
 import java.util.Map;
 
 /*

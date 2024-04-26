@@ -83,7 +83,7 @@ public class IBanGenerationTest {
     }
 
 
- /*   *
+    /*   *
      * This is a test method to generate the IBAN without Account details
      */
     @Test
@@ -117,7 +117,7 @@ public class IBanGenerationTest {
         }
     }
 
-   /* *
+    /* *
      * This is a test method to generate the IBAN without Branch code and Account Number
      */
     @Test
@@ -147,7 +147,7 @@ public class IBanGenerationTest {
 
     //Test cases to handle failures
 
-/*    **
+    /*    **
      *IBan will not be generated if the request payload is invalid. This test case is for generating an IBAN where the country has a special symbol
      */
 

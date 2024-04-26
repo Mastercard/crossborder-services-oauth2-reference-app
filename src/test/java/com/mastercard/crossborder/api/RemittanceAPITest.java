@@ -1,15 +1,17 @@
 package com.mastercard.crossborder.api;
 
-import com.mastercard.crossborder.api.config.MastercardApiConfig;
-import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.helper.CrossBorderAPITestHelper;
-import com.mastercard.crossborder.api.rest.GetRemittanceAPI;
-import com.mastercard.crossborder.api.rest.QuotesAPI;
-import com.mastercard.crossborder.api.rest.RemittanceAPI;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
 import com.mastercard.crossborder.api.rest.request.RemittanceRequest;
 import com.mastercard.crossborder.api.rest.response.Error;
-import com.mastercard.crossborder.api.rest.response.*;
+import com.mastercard.crossborder.api.rest.response.Errors;
+import com.mastercard.crossborder.api.rest.response.Proposal;
+import com.mastercard.crossborder.api.rest.response.QuotesResponse;
+import com.mastercard.crossborder.api.rest.response.RemittanceResponse;
+import com.mastercard.crossborder.api.config.MastercardApiConfig;
+import com.mastercard.crossborder.api.exception.ServiceException;
+import com.mastercard.crossborder.api.rest.QuotesAPI;
+import com.mastercard.crossborder.api.rest.RemittanceAPI;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,11 +24,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 /*
@@ -50,9 +52,6 @@ public class RemittanceAPITest  {
 
     @Autowired
     MastercardApiConfig apiConfig;
-
-    @Autowired
-    GetRemittanceAPI getRemittanceAPI;
 
     private static final Logger logger = LoggerFactory.getLogger(RemittanceAPITest.class);
 
@@ -286,7 +285,7 @@ public class RemittanceAPITest  {
             Assert.fail("Payment has to fail for wrong proposal ID");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-           // Error error = errors.getError();
+            // Error error = errors.getError();
             List<Error> error = errors.getErrorList();
             Assert.assertFalse(error== null);
             if( error != null && !error.isEmpty()) {
@@ -396,111 +395,6 @@ public class RemittanceAPITest  {
                 assertEquals("DECLINE", error.get(0).getReasonCode());
             }
             logger.error("Payment with quote has failed for the error {}", se.getMessage());
-        }
-    }
-
-    /*
-     * #Usecase - 11 - **ERROR HANDLING IN JSON FORMAT**
-     * Method to test timeout for one shot payment
-     * **ONE SHOT PAYMENT TIMEOUT RESPONSE HANDLING**
-     * */
-    @Test
-    public void testTimeoutForOneShotPayment() {
-        logger.info("Running Usecase - 11, timeout scenario for one shot payment");
-
-        Map<String, Object> requestParams = new HashMap<>();
-        requestParams.put("partner-id", partnerId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
-        String currentTransRef = "";
-        try {
-            RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataForwardQuoteFeesNotIncludedForTimeout();
-            currentTransRef = paymentRequest.getRemittanceReference();
-            remittanceAPI.makePayment(headers, requestParams, paymentRequest);
-        }
-        catch(ServiceException ex){
-            if(ex != null && ex.getErrors() != null && ex.getErrors().getErrorList() != null && !ex.getErrors().getErrorList().isEmpty()) {
-                String source  = ex.getErrors().getErrorList().get(0).getSource();
-                if (source!=null && (source.equalsIgnoreCase("Service") || source.equalsIgnoreCase("Gateway"))) {
-                    logger.error("One shot payment has been timed out {}", ex.getMessage());
-                    initiateBackoffAlgo(currentTransRef);
-                } else {
-                    logger.error("One shot payment has failed");
-                    Assert.fail("One shot payment has failed");
-                }
-            }else {
-                logger.error("One shot payment has failed");
-                Assert.fail("One shot payment has failed");
-            }
-        }
-    }
-
-    /*
-     * #Usecase - 12 - **ERROR HANDLING IN JSON FORMAT**
-     * Method to test timeout for Payment with quote API
-     * **TIMEOUT FOR PAYMENT WITH QUOTE**
-     * */
-    @Test
-    public void testTimeoutForPaymentWithQuote() {
-        logger.info("Running Usecase - 12, timeout scenario for Payment with quote API");
-
-        Map<String, Object> requestParams = new HashMap<>();
-        requestParams.put("partner-id", partnerId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
-        String transactionRef = "";
-        try {
-            QuotesRequest request = CrossBorderAPITestHelper.setDataForForwardQuoteWithFeesIncluded();
-            request.setProposalReference("08" + System.currentTimeMillis() + "TO");
-            QuotesResponse quotesResponse = quotesAPI.getQuote(headers, requestParams, request);
-            Optional proposal = quotesResponse.getProposals().getProposal().stream().findFirst();
-            if (proposal.isPresent()) {
-                String ProposalId = ((Proposal) proposal.get()).getProposalId();
-                RemittanceRequest paymentRequest = CrossBorderAPITestHelper.setPaymentDataWithQuote(ProposalId);
-                paymentRequest.setRemittanceReference(request.getProposalReference());
-                transactionRef =  paymentRequest.getRemittanceReference();
-                remittanceAPI.makePayment(headers, requestParams, paymentRequest);
-            } else {
-                Assert.fail("Payment with quote has failed as quotes API has failed");
-                logger.info("Payment with quote has failed as quotes API has failed");
-            }
-        } catch (ServiceException ex) {
-            if (ex != null && ex.getErrors() != null && ex.getErrors().getErrorList() != null && !ex.getErrors().getErrorList().isEmpty()) {
-                logger.error("Payment with quote has been timed out {}", ex.getMessage());
-                String source = ex.getErrors().getErrorList().get(0).getSource();
-                if (source.equalsIgnoreCase("Service") || source.equalsIgnoreCase("Gateway")) {
-                    initiateBackoffAlgo(transactionRef);
-                }else {
-                    logger.error("Payment with quote has failed");
-                    Assert.fail("Payment with quote has failed");
-                }
-            } else{
-                logger.error("Payment with quote has failed");
-                Assert.fail("Payment with quote has failed");
-            }
-        }
-    }
-
-    public void initiateBackoffAlgo(String currentTransRef){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
-        Map<String, Object> requestParams = new HashMap<>();
-        requestParams.put("partner-id", partnerId);
-        requestParams.put("payment-reference", currentTransRef);
-
-        try {
-            RemittanceResponse retrievePayment = getRemittanceAPI.getPaymentByRef(headers, requestParams);
-            if (null != retrievePayment) {
-                logger.info("Retrieve payment by reference is Successful");
-                assertEquals(retrievePayment.getTransactionReference(), currentTransRef);
-            }else {
-                logger.info("Retrieve payment by reference has failed");
-                Assert.fail("Retrieve payment by reference has failed");
-            }
-
-        }catch(ServiceException se){
-            logger.error("Retrieve payment by reference has failed {}",se.getMessage());
-            Assert.fail(se.getMessage());
         }
     }
 

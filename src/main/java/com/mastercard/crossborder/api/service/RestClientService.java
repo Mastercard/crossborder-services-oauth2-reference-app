@@ -19,4 +19,5 @@ public interface RestClientService<T> {
     T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass,boolean isListResponse,Class<T> listElementClass) throws ServiceException;
     T serviceEncryption(String baseURL, HttpHeaders headers, HttpMethod httpMethod, Map<String, Object> requestParams, Object request, Class<T> responseClass) throws ServiceException;
 
+
 }
