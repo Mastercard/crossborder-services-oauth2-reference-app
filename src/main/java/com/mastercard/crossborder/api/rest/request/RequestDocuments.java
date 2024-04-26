@@ -3,17 +3,15 @@ package com.mastercard.crossborder.api.rest.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mastercard.crossborder.api.rest.response.Response;
 
-import java.io.Serializable;
+public class RequestDocuments {
 
-public class RequestDocuments implements Serializable {
-
-    private Response<Object> response;
+    private Response response;
     @JsonProperty(value = "response")
-    public Response<Object> getResponse() {
+    public Response getResponse() {
         return response;
     }
 
-    public void setResponse(Response<Object> response) {
+    public void setResponse(Response response) {
         this.response = response;
     }
 }

@@ -1,6 +1,7 @@
 package com.mastercard.crossborder.api.rest.request;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;

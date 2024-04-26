@@ -7,9 +7,9 @@ import com.mastercard.crossborder.api.rest.QuoteConfirmationAPI;
 import com.mastercard.crossborder.api.rest.QuotesAPI;
 import com.mastercard.crossborder.api.rest.request.QuoteConfirmation;
 import com.mastercard.crossborder.api.rest.request.QuotesRequest;
-import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import com.mastercard.crossborder.api.rest.response.Proposal;
 import com.mastercard.crossborder.api.rest.response.QuoteConfirmationResponse;
+import com.mastercard.crossborder.api.rest.response.QuotesResponse;
 import com.mastercard.crossborder.api.rest.response.RetrieveQuoteStatus;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,10 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -83,7 +85,6 @@ public class QuoteConfirmationAPITest {
             logger.error("Quote Confirmation within expiry time has failed for the error {}", re.getMessage());
         }
     }
-
 
     @Test
     public void testCancelConfirmedQuote() {

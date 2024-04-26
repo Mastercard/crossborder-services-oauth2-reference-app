@@ -81,9 +81,9 @@ public class BavHelperApi {
     }
     public static BankInfoLookupRequest createBankWithNameAndCountry() {
         Bic bic= new Bic(null,null);
-        BAVAddress bavAddress = new BAVAddress("Belfast",null,null);
+        BAVAddress bavAddress = new BAVAddress("Guiseley",null,"LS20 8AE");
         Bank bank = new Bank("Barclays Bank PLC",
-                null,"GBR",bic,bavAddress);
+                "Oxford Rd","GBR",bic,bavAddress);
         return new BankInfoLookupRequest(bank);
     }
 
