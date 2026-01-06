@@ -1,4 +1,4 @@
-package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response.begapi;
+package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.begapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,21 +24,13 @@ public class BusinessBeg {
     private List<String> restrictedFlows;
     private String registrationRequirements;
     private ClearingPaymentInformationDTO clearingPaymentInformation;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value="cashPickupInformation", access = JsonProperty.Access.WRITE_ONLY)
     private CashPickupDTO cashPickup;
-    @JsonProperty("cashPickupInformation")
-    public CashPickupDTO getCashPickupInformation() {
-        return cashPickup;
-    }
     private ReceivingInstitutionDTO receivingInstitution;
     private LimitDTO sendTransactionAmountLimit;
     private LimitDTO receiveTransactionAmountLimit;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "clearingSystemDetails", access = JsonProperty.Access.WRITE_ONLY)
     private List<ClearingHouseDetailDTO> clearingHouseDetails;
-    @JsonProperty("clearingSystemDetails")
-    public List<ClearingHouseDetailDTO> getClearingSystemDetails() {
-        return clearingHouseDetails;
-    }
     private List<DocumentationDTO> documentations;
     private List<PreApprovedRequirementDTO> preApprovedRequirements;
 
