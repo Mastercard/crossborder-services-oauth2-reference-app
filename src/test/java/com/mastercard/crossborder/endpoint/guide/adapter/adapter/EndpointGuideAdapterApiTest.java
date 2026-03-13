@@ -1,10 +1,10 @@
-package com.mastercard.crossborder.api.endpoint.guide.adapter.api;
+package com.mastercard.crossborder.endpoint.guide.adapter.adapter;
 
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
-import com.mastercard.crossborder.api.endpoint.guide.adapter.api.helper.EndpointGuideAdapter;
+import com.mastercard.crossborder.endpoint.guide.adapter.adapter.helper.EndpointGuideAdapter;
 import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.EndpointGuideAdapterApi;
-import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.EndpointGuideResponse;
+import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.EndpointGuideAdapterApi;
+import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response.EndpointGuideResponse;
 import com.mastercard.crossborder.api.rest.response.Error;
 import com.mastercard.crossborder.api.rest.response.Errors;
 import org.junit.Assert;

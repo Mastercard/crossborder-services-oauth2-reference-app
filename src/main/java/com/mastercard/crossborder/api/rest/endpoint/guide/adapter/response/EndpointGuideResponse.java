@@ -1,8 +1,8 @@
-package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response;
+package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.begapi.BusinessBeg;
+import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response.begapi.BusinessBeg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;

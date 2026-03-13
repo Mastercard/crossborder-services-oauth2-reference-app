@@ -1,4 +1,4 @@
-package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.begapi;
+package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response.begapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
