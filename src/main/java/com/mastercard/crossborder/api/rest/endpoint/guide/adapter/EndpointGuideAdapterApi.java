@@ -1,4 +1,4 @@
-package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api;
+package com.mastercard.crossborder.api.rest.endpoint.guide.adapter;
 
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.EndpointGuideResponse;
