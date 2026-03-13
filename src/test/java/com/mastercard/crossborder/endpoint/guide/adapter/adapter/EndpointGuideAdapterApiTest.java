@@ -1,4 +1,4 @@
-package com.mastercard.crossborder.api.endpoint.guide.adapter.adapter;
+package com.mastercard.crossborder.endpoint.guide.adapter.adapter;
 
 import com.mastercard.crossborder.api.config.MastercardApiConfig;
 import com.mastercard.crossborder.endpoint.guide.adapter.adapter.helper.EndpointGuideAdapter;
