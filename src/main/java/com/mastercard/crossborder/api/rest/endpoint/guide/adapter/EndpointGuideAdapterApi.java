@@ -1,7 +1,7 @@
 package com.mastercard.crossborder.api.rest.endpoint.guide.adapter;
 
 import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response.EndpointGuideResponse;
+import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response.EndpointGuideResponse;
 import com.mastercard.crossborder.api.service.RestClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
