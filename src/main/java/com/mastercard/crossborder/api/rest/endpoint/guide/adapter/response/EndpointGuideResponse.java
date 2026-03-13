@@ -1,4 +1,4 @@
-package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.api.response;
+package com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
