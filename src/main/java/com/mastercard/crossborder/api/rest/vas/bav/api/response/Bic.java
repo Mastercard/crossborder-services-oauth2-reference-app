@@ -12,4 +12,7 @@ import lombok.ToString;
 public class Bic {
     String type;
     String value;
+    ACH ach;
+    Wire wire;
+
 }
