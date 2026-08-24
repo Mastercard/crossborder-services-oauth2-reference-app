@@ -1,18 +1,16 @@
 package com.mastercard.crossborder.api.rest.vas.bav.api;
 
 import com.mastercard.crossborder.api.exception.ServiceException;
-import com.mastercard.crossborder.api.rest.vas.bav.api.request.Bank;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.BankInfoLookupRequest;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.IBanValidationRequest;
 import com.mastercard.crossborder.api.rest.vas.bav.api.request.IbanCreationDetails;
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.BankInfoLookupResponse;
-import com.mastercard.crossborder.api.rest.vas.bav.api.response.BankInfoResponse;
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.IBanGenerationResponse;
 import com.mastercard.crossborder.api.rest.vas.bav.api.response.ValidateAccountResponse;
 import com.mastercard.crossborder.api.service.RestClientService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -20,12 +18,13 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class BAVApi {
 
-    @Autowired
-    RestClientService restClientService;
+    private final RestClientService restClientService;
 
     private static final Logger logger = LoggerFactory.getLogger(BAVApi.class);
+    private static final String CALLING_BAV_API_LOG_MESSAGE = "Calling BAV Api";
 
     public static final String IBAN_GENERATION_URL = "/send/partners/{partner-id}/crossborder/accounts/generate-ibans" ;
 
@@ -37,17 +36,17 @@ public class BAVApi {
      * IBAN Generation methods
      */
     public IBanGenerationResponse generateIBan(HttpHeaders httpHeaders, Map<String, Object> requestParams, IbanCreationDetails request) throws ServiceException {
-        logger.info("Calling BAV Api");
+        logger.info(CALLING_BAV_API_LOG_MESSAGE);
         return (IBanGenerationResponse) restClientService.serviceEncryption(IBAN_GENERATION_URL, httpHeaders, HttpMethod.POST, requestParams, request, IBanGenerationResponse.class);
     }
 
     public ValidateAccountResponse validateAccount(HttpHeaders httpHeaders, Map<String, Object> requestParams, IBanValidationRequest request) throws ServiceException {
-        logger.info("Calling BAV Api");
+        logger.info(CALLING_BAV_API_LOG_MESSAGE);
         return (ValidateAccountResponse) restClientService.serviceEncryption(ACCOUNT_VALIDATION_URL, httpHeaders, HttpMethod.POST, requestParams, request, ValidateAccountResponse.class);
     }
 
     public BankInfoLookupResponse getBankDetails(HttpHeaders httpHeaders, Map<String, Object> requestParams, BankInfoLookupRequest request) throws ServiceException {
-        logger.info("Calling BAV Api");
+        logger.info(CALLING_BAV_API_LOG_MESSAGE);
         return (BankInfoLookupResponse) restClientService.serviceEncryption(BANK_INFO_LOOKUP_URL, httpHeaders, HttpMethod.POST, requestParams, request, BankInfoLookupResponse.class);
     }
 

@@ -40,8 +40,7 @@ public class UploadDocumentAPITest {
     MastercardApiConfig apiConfig;
 
     private static final Logger logger = LoggerFactory.getLogger(UploadDocumentAPITest.class);
-
-    private static final String partnerIdStr ="partner-id";
+    
     @Before
     public void init() {
         partnerId = apiConfig.getPartnerId();
@@ -61,8 +60,8 @@ public class UploadDocumentAPITest {
             UploadDocumentResponse uploadDocumentResponse = uploadDocumentAPI.uploadDocument( headers, requestParams, request);
 
             if (null != uploadDocumentResponse) {
-                logger.info("DocumentId for the upload document is : {}", (uploadDocumentResponse.getDocumentId()));
-                Assert.assertNotNull(((uploadDocumentResponse.getDocumentId())));
+                logger.info("DocumentId for the upload document is : {}", uploadDocumentResponse.getDocumentId());
+                Assert.assertNotNull(uploadDocumentResponse.getDocumentId());
             } else {
                 logger.info("Upload Document  request has failed");
                 Assert.fail("Upload Document  request has failed");
@@ -90,8 +89,8 @@ public class UploadDocumentAPITest {
                 //This API call makes sure your request is encrypted before being sent over the network
                 UploadDocumentResponse uploadDocumentResponse = uploadDocumentAPI.uploadDocumentWithEncryption(headers, requestParams, request);
                 if (null != uploadDocumentResponse){
-                    logger.info("DocumentId for the upload document is : {}", (uploadDocumentResponse.getDocumentId()));
-                    Assert.assertNotNull(((uploadDocumentResponse.getDocumentId())));
+                    logger.info("DocumentId for the upload document is : {}", uploadDocumentResponse.getDocumentId());
+                    Assert.assertNotNull(uploadDocumentResponse.getDocumentId());
                 } else {
                     logger.info("Upload Document  request has failed");
                     Assert.fail("Upload Document  request has failed");
@@ -116,13 +115,11 @@ public class UploadDocumentAPITest {
 
         try {
             UploadDocumentRequest request = CrossBorderAPITestHelper.setDataForUploadDocument();
-            UploadDocumentResponse uploadDocumentResponse = uploadDocumentAPI.uploadDocument(headers, requestParams, request);
+            uploadDocumentAPI.uploadDocument(headers, requestParams, request);
             Assert.fail("Upload Document Request has to fail for wrong File Name");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            //Error error = errors.getError();
             List<Error> error = errors.getErrors();
-            //Assert.assertFalse(error== null);
             if( error != null && !error.isEmpty()) {
                 assertEquals("FileName", error.get(0).getSource());
                 assertEquals("DECLINE", error.get(0).getReasonCode());

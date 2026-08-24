@@ -56,7 +56,7 @@ public class RetrieveRequestAPITest {
             RetrieveRequestResponse retrieveRequestResponse = retrieveRequestResponseAPI.getRequestById(headers,requestParams);
             if (null != retrieveRequestResponse) {
                 logger.info("Retrieve Request by REQUEST ID is Successful with requestId {}", retrieveRequestResponse.getRetrieveResponse().getRequestId());
-                Assert.assertNotNull(((retrieveRequestResponse.getRetrieveResponse().getRequestId())));
+                Assert.assertNotNull(retrieveRequestResponse.getRetrieveResponse().getRequestId());
             } else {
                 logger.info("Retrieve Request by ID has failed");
                 Assert.fail("Retrieve Request by ID has failed");
@@ -82,7 +82,7 @@ public class RetrieveRequestAPITest {
                 RetrieveRequestResponse retrieveRequestResponse = retrieveRequestResponseAPI.getRequestByIdWithEncryption(headers,requestParams);
                 if (null != retrieveRequestResponse) {
                     logger.info("Retrieve Request by REQUEST ID is Successful with requestId {}", retrieveRequestResponse.getRetrieveResponse().getRequestId());
-                    Assert.assertNotNull(((retrieveRequestResponse.getRetrieveResponse().getRequestId())));
+                    Assert.assertNotNull(retrieveRequestResponse.getRetrieveResponse().getRequestId());
                 } else {
                     logger.info("Retrieve Request by ID has failed");
                     Assert.fail("Retrieve Request by ID has failed");
