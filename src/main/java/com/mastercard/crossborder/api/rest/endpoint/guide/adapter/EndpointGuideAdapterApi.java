@@ -3,20 +3,19 @@ package com.mastercard.crossborder.api.rest.endpoint.guide.adapter;
 import com.mastercard.crossborder.api.exception.ServiceException;
 import com.mastercard.crossborder.api.rest.endpoint.guide.adapter.response.EndpointGuideResponse;
 import com.mastercard.crossborder.api.service.RestClientService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-
+@RequiredArgsConstructor
 @Component
 public class EndpointGuideAdapterApi {
-    @Autowired
-    RestClientService restClientService; // NOSONAR
+    private final RestClientService restClientService; // NOSONAR
     private static final Logger logger = LoggerFactory.getLogger(EndpointGuideAdapterApi.class);
     public static final String ENDPOINT_GUIDE_ADAPTER_URL="crossborder/endpoint-guide/specifications?payment_type={paymentType}&destination_payment_instrument={destinationPaymentInstrument}&destination_country={destinationCountry}&destination_currency={destinationCurrency}";
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.nimbusds.jose.jwk.JWK;
 import lombok.Generated;
+import java.util.Objects;
 
 public class SignerPublicKey {
 
@@ -17,6 +18,7 @@ public class SignerPublicKey {
     private JWK publicKey;
     private boolean active;
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -26,6 +28,11 @@ public class SignerPublicKey {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.publicKey != null ? this.publicKey.getKeyID() : null);
     }
 
     @Generated

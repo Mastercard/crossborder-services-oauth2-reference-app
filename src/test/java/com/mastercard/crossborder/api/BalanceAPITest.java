@@ -46,7 +46,6 @@ public class BalanceAPITest {
 
     private static final String partnerIdStr = "partner-id";
     private static final String includeBalance="include_balance";
-    private static final Boolean value=true;
     private static final String status = "ACTIVE";
     private static final String accountId="account_id";
 

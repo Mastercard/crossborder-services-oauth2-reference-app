@@ -13,7 +13,7 @@ public class GovernmentId implements Serializable {
 
     private String type;
     private String number;
-    private List< Object > documents = new ArrayList< Object>();
+    private List<Serializable> documents = new ArrayList<Serializable>();
 
 
     @JsonProperty(value = "type")
@@ -35,11 +35,11 @@ public class GovernmentId implements Serializable {
     }
 
     @JsonProperty(value = "documents")
-    public List<Object> getDocuments() {
+    public List<Serializable> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(List<Object> documents) {
+    public void setDocuments(List<Serializable> documents) {
         this.documents = documents;
     }
 }
