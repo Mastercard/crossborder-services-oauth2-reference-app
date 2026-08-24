@@ -31,7 +31,7 @@ public class EncryptionUtils {
 	private static final JWEAlgorithm ALG = JWEAlgorithm.RSA_OAEP_256;
 	private static final EncryptionMethod ENC_MTHD = EncryptionMethod.A256GCM;
 
-	public static String jweEncrypt(String plainData, Resource crtFileName, String keyFingerPrint, String requestContentType,String decryptionKeyAlias, String decryptionPassword) throws ServiceException {
+	public static String jweEncrypt(String plainData, Resource crtFileName, String keyFingerPrint, String requestContentType) throws ServiceException {
 			try {
 				RSAPublicKey rsaPublicKey = (RSAPublicKey) getPublicKeyFromCrt(crtFileName);
 				return encryptWithPublicKey(plainData, rsaPublicKey, keyFingerPrint, requestContentType);
