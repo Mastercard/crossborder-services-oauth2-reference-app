@@ -18,8 +18,6 @@ public class LocalTokenSignerService {
 
     private static final Logger log = LoggerFactory.getLogger(com.mastercard.oauth2.requesttoken.service.LocalTokenSignerService.class);
 
-    private static final String ERROR_MESSAGE = "No private key associated with alias ";
-
     private final LocalCertificateProvider certificateProvider;
 
     public LocalTokenSignerService(LocalCertificateProvider certificateProvider) {

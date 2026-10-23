@@ -18,7 +18,7 @@ public class FullAddress implements Serializable {
     private String countrySubdivision;
     private String country;
     private String postalCode;
-    private List< Object > documents = new ArrayList< Object >();
+    private List<Serializable> documents = new ArrayList<Serializable>();
 
     @JsonProperty(value = "addressLine1")
     public String getAddressLine1() {
@@ -75,11 +75,11 @@ public class FullAddress implements Serializable {
     }
 
     @JsonProperty(value = "documents")
-    public List<Object> getDocuments() {
+    public List<Serializable> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(List<Object> documents) {
+    public void setDocuments(List<Serializable> documents) {
         this.documents = documents;
     }
 }

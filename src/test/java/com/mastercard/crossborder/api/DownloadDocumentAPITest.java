@@ -40,7 +40,6 @@ public class DownloadDocumentAPITest {
 
     private static final Logger logger = LoggerFactory.getLogger(DownloadDocumentAPITest.class);
 
-    private static final String partnerIdStr ="partner-id";
     @Before
     public void init() {
         partnerId = apiConfig.getPartnerId();
@@ -59,8 +58,8 @@ public class DownloadDocumentAPITest {
             DownloadDocumentResponse downloadDocumentResponse = downloadDocumentAPI.downloadDocumentById(headers,requestParams);
 
             if (null != downloadDocumentResponse) {
-                logger.info("ReferenceId for the Download Document  is : {}", (downloadDocumentResponse.getReferenceId()));
-                Assert.assertNotNull(((downloadDocumentResponse.getReferenceId())));
+                logger.info("ReferenceId for the Download Document  is : {}", downloadDocumentResponse.getReferenceId());
+                Assert.assertNotNull(downloadDocumentResponse.getReferenceId());
             } else {
                 logger.info("Download Document  request has failed");
                 Assert.fail("Download Document  request has failed");
@@ -87,8 +86,8 @@ public class DownloadDocumentAPITest {
                 //This API call makes sure your request is encrypted before being sent over the network
                 DownloadDocumentResponse downloadDocumentResponse = downloadDocumentAPI.downloadDocumentByIdWithEncryption(headers, requestParams);
                 if (null != downloadDocumentResponse){
-                    logger.info("ReferenceId for the download document is : {}", (downloadDocumentResponse.getReferenceId()));
-                    Assert.assertNotNull(((downloadDocumentResponse.getReferenceId())));
+                    logger.info("ReferenceId for the download document is : {}", downloadDocumentResponse.getReferenceId());
+                    Assert.assertNotNull(downloadDocumentResponse.getReferenceId());
                 } else {
                     logger.info("Download Document  request has failed");
                     Assert.fail("Download Document  request has failed");
@@ -113,11 +112,10 @@ public class DownloadDocumentAPITest {
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML);
 
         try {
-            DownloadDocumentResponse downloadDocumentResponse = downloadDocumentAPI.downloadDocumentById(headers, requestParams);
+            downloadDocumentAPI.downloadDocumentById(headers, requestParams);
             Assert.fail("Download Document Request has to fail for wrong document Id");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-//            Error error = errors.getError();
             List<Error> error = errors.getErrors();
             Assert.assertFalse(errors== null);
             if( error != null) {
@@ -129,7 +127,3 @@ public class DownloadDocumentAPITest {
     }
 
 }
-
-
-
-

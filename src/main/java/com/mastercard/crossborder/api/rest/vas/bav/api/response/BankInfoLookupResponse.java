@@ -5,6 +5,7 @@ public class BankInfoLookupResponse {
     BankInfoResponse bankInfo;
 
     public BankInfoLookupResponse(){
+        /* Intentionally empty: required for JSON deserialization. */
     }
 
     public BankInfoResponse getBankInfo() {

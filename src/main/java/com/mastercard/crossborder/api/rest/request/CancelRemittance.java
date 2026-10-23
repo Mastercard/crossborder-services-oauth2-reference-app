@@ -17,6 +17,10 @@ public class CancelRemittance extends BaseRequest implements Serializable {
     }
 
     public CancelRemittance(String stringBody) {
+        /*
+         * Intentionally empty.
+         * This constructor is retained for backward compatibility with existing request construction paths.
+         */
     }
 
 }

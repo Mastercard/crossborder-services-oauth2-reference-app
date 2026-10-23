@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Oauth2RequestTokenGenerator {
-
-    private static final Logger log = LoggerFactory.getLogger(com.mastercard.oauth2.requesttoken.generator.Oauth2RequestTokenGenerator.class);
     public static final String PKCS_12 = "PKCS12";
 
     private LocalTokenSignerService localTokenSignerService ;

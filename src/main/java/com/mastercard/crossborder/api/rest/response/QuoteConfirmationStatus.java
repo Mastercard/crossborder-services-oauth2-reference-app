@@ -24,8 +24,6 @@ public class QuoteConfirmationStatus extends BaseRequest implements Serializable
     private String stage;
     private String proposalId;
     private String paymentSubmissionExpiryTime;
-    private ProposedQuote proposedQuote;
-
     @JsonProperty(value = "transactionReference", required = true)
     @XmlElement(name = "transactionReference", required = true)
     public String getTransactionReference() {

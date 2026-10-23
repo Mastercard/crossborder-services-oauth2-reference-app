@@ -4,9 +4,9 @@ import com.mastercard.crossborder.api.service.RestClientService;
 import com.mastercard.crossborder.api.rest.request.CancelRemittance;
 import com.mastercard.crossborder.api.rest.response.CancelResponse;
 import com.mastercard.crossborder.api.exception.ServiceException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,7 @@ import java.util.Map;
     If the payment is initiated and it is not yet successful
     then cancel payment will cancel the process of payment
  */
+@RequiredArgsConstructor
 @Component
 public class CancelRemittanceAPI {
 
@@ -24,8 +25,7 @@ public class CancelRemittanceAPI {
 
     public static final String CANCEL_REMITTANCE = "/send/v1/partners/{partner-id}/crossborder/{payment-id}/cancel";
 
-    @Autowired
-    RestClientService<CancelResponse> restClientService;
+    private final RestClientService<CancelResponse> restClientService;
 
     public CancelResponse cancelPayment(HttpHeaders headers, Map<String, Object> requestParams, CancelRemittance cancelRequest ) throws ServiceException {
          logger.info("Calling cancel payment API");

@@ -42,7 +42,6 @@ public class UpdateRequestAPITest {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateRequestAPITest.class);
 
-    private static final String partnerIdStr ="partner_id";
     @Before
     public void init() {
         partnerId = apiConfig.getPartnerId();
@@ -64,7 +63,7 @@ public class UpdateRequestAPITest {
 
             if (null != updateResponse) {
                 logger.info("Reference Id for the update request is : {}", (updateResponse.getReferenceId()));
-                Assert.assertNotNull(((updateResponse.getReferenceId())));
+                Assert.assertNotNull(updateResponse.getReferenceId());
             } else {
                 logger.info("Update Request has failed");
                 Assert.fail("Update Request has failed");
@@ -93,7 +92,7 @@ public class UpdateRequestAPITest {
                 UpdateResponse updateResponse = updateRequestAPI.updateRequestWithEncryption(headers, requestParams, request);
                 if (null != updateResponse){
                     logger.info("Reference Id for the update request is : {}", (updateResponse.getReferenceId()));
-                    Assert.assertNotNull(((updateResponse.getReferenceId())));
+                    Assert.assertNotNull(updateResponse.getReferenceId());
                 } else {
                     logger.info("Update Request  has failed");
                     Assert.fail("Update Request  has failed");
@@ -119,11 +118,10 @@ public class UpdateRequestAPITest {
 
         try {
             UpdateRequest request = CrossBorderAPITestHelper.setDataForUpdateRequest();
-            UpdateResponse updateResponse = updateRequestAPI.updateRequest(headers, requestParams, request);
+            updateRequestAPI.updateRequest(headers, requestParams, request);
             Assert.fail("Update Request has to fail for wrong request id");
         } catch (ServiceException se){
             Errors errors = se.getErrors();
-            // Error error = errors.getError();
             List<Error> error = errors.getErrors();
             Assert.assertFalse(se.getErrors()== null);
             if( error != null && !error.isEmpty()) {
